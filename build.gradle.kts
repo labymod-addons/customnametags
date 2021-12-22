@@ -56,7 +56,7 @@ subprojects {
 addon {
     addonInfo {
         id("nametags")
-        displayName("NameTags")
+        displayName("CustomNameTags")
         author("LabyMod")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
