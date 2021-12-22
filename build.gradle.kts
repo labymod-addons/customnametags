@@ -55,9 +55,9 @@ subprojects {
 
 addon {
     addonInfo {
-        id("example")
-        displayName("Example Addon")
-        author("Example Author")
+        id("nametags")
+        displayName("NameTags")
+        author("LabyMod")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
