@@ -1,10 +1,7 @@
 package net.labymod.addons.nametags;
 
 import com.google.inject.Singleton;
-import javax.inject.Inject;
-import net.labymod.addons.nametags.gui.NameTagNavigationElement;
 import net.labymod.api.LabyAPI;
-import net.labymod.api.client.gui.navigation.NavigationRegistry;
 import net.labymod.api.configuration.loader.ConfigurationLoader;
 import net.labymod.api.configuration.settings.SettingsRegistry;
 import net.labymod.api.configuration.settings.gui.SettingCategoryRegistry;
@@ -14,6 +11,7 @@ import net.labymod.api.event.client.lifecycle.GameInitializeEvent;
 import net.labymod.api.event.client.lifecycle.GameInitializeEvent.Lifecycle;
 import net.labymod.api.event.labymod.config.ConfigurationSaveEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
+import javax.inject.Inject;
 
 @AddonMain
 @Singleton
@@ -51,10 +49,24 @@ public class NameTags {
       e.printStackTrace();
     }
 
-    NavigationRegistry navigationRegistry = this.labyAPI.getNavigationService();
-    navigationRegistry.register("nametags",
-        this.labyAPI.getInjected(NameTagNavigationElement.class));
+//    NavigationRegistry navigationRegistry = this.labyAPI.getNavigationService();
+//    navigationRegistry.register("nametags",
+//        this.labyAPI.getInjected(NameTagNavigationElement.class));
   }
+
+  /*  @Subscribe
+    public void onSettingWidgetInitialize(SettingWidgetInitializeEvent event) {
+      if (!event.getLayer().getId().equals("nametags.settings")) {
+        return;
+      }
+
+      SettingOpenActivityWidget activityWidget = new SettingOpenActivityWidget(null,
+          Component.text("NameTags"),
+          () -> {
+           event.getParentScreen().displayScreen(this.labyAPI.getInjected(NameTagActivity.class));
+          });
+      event.getSettings().add(activityWidget);
+    }
 
   /**
    * On configuration save.
