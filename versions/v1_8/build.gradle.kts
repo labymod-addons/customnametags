@@ -1,6 +1,6 @@
 plugins {
 	id("net.labymod.gradle.legacyminecraft")
-	id("net.labymod.gradle.mixin")
+	id("net.labymod.gradle.volt")
 }
 
 val minecraftGameVersion: String = "1.8.9"
@@ -21,13 +21,15 @@ legacyMinecraft {
     args("--addon-dev-environment", "true")
 }
 
-mixin {
-    compatibilityLevel("JAVA_8")
-    minVersion("0.7.11")
+volt {
+    mixin {
+        compatibilityLevel = "JAVA_8"
+        minVersion = "0.6.6"
+    }
 
     packageName("org.example.addons.v1_8.mixins")
 
-    version(minecraftGameVersion)
+    version = minecraftGameVersion
 }
 
 intellij {
