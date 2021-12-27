@@ -74,10 +74,10 @@ addon {
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
-/*    dev {
-        releaseChannel = "feature-activitysetting"
+    dev {
+        releaseChannel = "feature-nametag"
         commitReference = "unknown"
-    } */
+    }
 
     internalRelease()
 }
