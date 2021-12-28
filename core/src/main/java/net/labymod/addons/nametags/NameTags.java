@@ -15,8 +15,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.labymod.addons.nametags.gui.activity.NameTagActivity;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.client.entity.player.Player;
+import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
 import net.labymod.api.configuration.loader.ConfigurationLoader;
 import net.labymod.api.configuration.settings.SettingsRegistry;
 import net.labymod.api.configuration.settings.gui.SettingCategoryRegistry;
@@ -26,6 +28,7 @@ import net.labymod.api.event.client.lifecycle.GameInitializeEvent;
 import net.labymod.api.event.client.lifecycle.GameInitializeEvent.Lifecycle;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 import net.labymod.api.event.labymod.config.ConfigurationSaveEvent;
+import net.labymod.api.event.labymod.config.SettingWidgetInitializeEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
 @AddonMain
@@ -60,12 +63,12 @@ public class NameTags {
     ConfigurationLoader configurationLoader = this.labyAPI.getConfigurationLoader();
     try {
       this.configuration = configurationLoader.load(NameTagConfiguration.class);
-      this.configuration.getCustomTags().put("Metafrage", "lol");
-      this.configuration.getCustomTags().put("JumpingPxl", "&4Jumping&cHatschxl");
+      //     this.configuration.getCustomTags().put("Metafrage", CustomTag.create(true, "lol", false));
+      //    this.configuration.getCustomTags().put("JumpingPxl", CustomTag.create(true, "&4Jumping&cHatschxl", false));
+      //     configurationLoader.save(configuration);
 
       SettingsRegistry registry = this.configuration.initializeRegistry();
-
-      this.categoryRegistry.register(registry.getId(), registry);
+      this.categoryRegistry.register("nametags.settings", registry);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -75,7 +78,7 @@ public class NameTags {
 //        this.labyAPI.getInjected(NameTagNavigationElement.class));
   }
 
-  /*  @Subscribe
+  @Subscribe
     public void onSettingWidgetInitialize(SettingWidgetInitializeEvent event) {
       if (!event.getLayer().getId().equals("nametags.settings")) {
         return;
@@ -110,9 +113,12 @@ public class NameTags {
     if (Objects.isNull(customName)) {
       customName = (List<Component>) player.getDataWatcher()
           .computeIfAbsent("customNameTag", absent -> {
-            for (Entry<String, String> customTag : this.configuration.getCustomTags().entrySet()) {
-              if (customTag.getKey().equalsIgnoreCase(player.getName())) {
-                return this.fromString(customTag.getValue());
+            for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
+                .entrySet()) {
+              CustomTag customTag = customTagEntry.getValue();
+              if (customTag.isEnabled() && customTagEntry.getKey()
+                  .equalsIgnoreCase(player.getName())) {
+                return this.fromString(customTag.getCustomName());
               }
             }
 

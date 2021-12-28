@@ -18,14 +18,14 @@ public final class NameTagConfiguration extends AddonConfig {
   @SwitchSetting
   private boolean enabled;
 
-  private Map<String, String> customTags = new HashMap<>();
+  private Map<String, CustomTag> customTags = new HashMap<>();
 
   @Override
   public boolean isEnabled() {
     return this.enabled;
   }
 
-  public Map<String, String> getCustomTags() {
+  public Map<String, CustomTag> getCustomTags() {
     return this.customTags;
   }
 }

@@ -40,7 +40,7 @@ volt {
         minVersion = "0.8.2"
     }
 
-    packageName("org.example.addon.v1_17.mixins")
+    packageName("net.labymod.addons.nametag.v1_17.mixins")
 
     version = minecraftGameVersion
 }
