@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.labymod.addons.nametags.gui.activity.NameTagActivity;
 import net.labymod.api.LabyAPI;
+import net.labymod.api.client.entity.datawatcher.DataPoint;
 import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
 import net.labymod.api.configuration.loader.ConfigurationLoader;
@@ -98,7 +99,7 @@ public class NameTags {
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
     Player player = event.getPlayer();
-    TextComponent customNameTag = player.getDataWatcher()
+    DataPoint<TextComponent> customNameTag = player.getDataWatcher()
         .computeIfAbsent("customNameTag", absent -> {
           for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
               .entrySet()) {
@@ -109,17 +110,17 @@ public class NameTags {
             }
           }
 
-          return Component.empty();
+          return null;
         });
 
-    if (customNameTag == Component.empty()) {
+    if (!customNameTag.isPresent()) {
       return;
     }
 
     TextComponent component = (TextComponent) event.getComponent();
     if (component.content().contains(player.getName())) {
       List<Component> children = new ArrayList<>();
-      children.add(customNameTag);
+      children.add(customNameTag.getValue());
       children.addAll(component.children());
       component = Component.empty().children(children);
     } else {
@@ -127,7 +128,7 @@ public class NameTags {
       for (int i = 0; i < component.children().size(); i++) {
         TextComponent childComponent = (TextComponent) component.children().get(i);
         if (childComponent.content().contains(player.getName())) {
-          children.add(customNameTag);
+          children.add(customNameTag.getValue());
         } else {
           children.add(childComponent);
         }
