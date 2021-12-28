@@ -34,8 +34,7 @@ public class NameTagWidget extends SimpleWidget {
     nameWidget.addId("name");
     this.addChild(nameWidget);
 
-    ComponentWidget customNameWidget = ComponentWidget.component(
-        Component.text(this.customTag.getCustomName().replace("&", "§").replace("Â", "")));
+    ComponentWidget customNameWidget = ComponentWidget.component(this.customTag.getComponent());
     customNameWidget.addId("customName");
     this.addChild(customNameWidget);
   }

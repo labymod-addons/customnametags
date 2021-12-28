@@ -1,5 +1,8 @@
 package net.labymod.addons.nametags;
 
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 public class CustomTag {
 
   private boolean enabled;
@@ -38,5 +41,9 @@ public class CustomTag {
 
   public void setReplaceScoreboard(boolean replaceScoreboard) {
     this.replaceScoreboard = replaceScoreboard;
+  }
+
+  public TextComponent getComponent() {
+    return LegacyComponentSerializer.legacyAmpersand().deserialize(this.getCustomName());
   }
 }
