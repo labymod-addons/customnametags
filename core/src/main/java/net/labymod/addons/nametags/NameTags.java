@@ -4,7 +4,6 @@ import com.google.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -27,9 +26,6 @@ import net.labymod.api.models.addon.annotation.AddonMain;
 @AddonMain
 @Singleton
 public class NameTags {
-
-  private static final Pattern COLOR_PATTERN = Pattern.compile("[0123456789abcdefr]");
-  private static final Pattern FORMAT_PATTERN = Pattern.compile("[lmno]");
 
   private final LabyAPI labyAPI;
   private final SettingCategoryRegistry categoryRegistry;
