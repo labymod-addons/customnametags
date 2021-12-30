@@ -9,7 +9,7 @@ public class CustomTag {
   private String customName;
   private boolean replaceScoreboard;
 
-  private CustomTag(boolean enabled, String customName, boolean replaceScoreboard) {
+  public CustomTag(boolean enabled, String customName, boolean replaceScoreboard) {
     this.enabled = enabled;
     this.customName = customName;
     this.replaceScoreboard = replaceScoreboard;
