@@ -27,8 +27,8 @@ public class NameTagWidget extends SimpleWidget {
   @Override
   public void initialize(Parent parent) {
     super.initialize(parent);
-    if (this.tempNameTag.getUserName().length() == 0) {
-      this.tempNameTag.setUserName(this.tempNameTag.getDefaultUserName());
+    if (this.tempNameTag.getUserName().length() == 0 && !this.tempNameTag.isPlaceholder()) {
+      this.tempNameTag.setUserName("null");
     }
 
     Icon icon = this.tempNameTag.isPlaceholder() ? Icon.sprite16(
