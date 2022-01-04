@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import javax.inject.Inject;
 import net.labymod.addons.nametags.CustomTag;
 import net.labymod.addons.nametags.NameTagConfiguration;
+import net.labymod.addons.nametags.gui.activity.NameTagManageActivity.Action;
 import net.labymod.api.client.gui.screen.Parent;
 import net.labymod.api.client.gui.screen.activity.types.SimpleActivity;
 import net.labymod.api.client.gui.screen.widget.widgets.DivWidget;
@@ -34,7 +35,12 @@ public class NameTagActivity extends SimpleActivity {
 
     this.nameTagList = new VerticalListWidget<>();
     this.nameTagList.addId("name-tag-list");
-    this.nameTagList.setSelectCallback(this::onNameTagSelect);
+    //this.nameTagList.setSelectCallback(this::onNameTagSelect);
+    //this.nameTagList.setDoubleClickCallback(nameTagWidget -> this.displayScreen(
+    //   new NameTagManageActivity(nameTagWidget.getTempNameTag(), Action.EDIT)));
+    this.nameTagList.setDoubleClickCallback(nameTagWidget -> this.displayOverlay(
+        new NameTagManageActivity(nameTagWidget, nameTagWidget.getTempNameTag().getUserName(),
+            nameTagWidget.getTempNameTag().getCustomTag(), Action.EDIT)));
   }
 
   @Override
@@ -46,6 +52,13 @@ public class NameTagActivity extends SimpleActivity {
     container.addId("name-tag-container");
 
     boolean hasPlaceholder = false;
+
+    /*
+      Make that the buttons to edit/remove a nametag are shown when selected
+      display new activity to edit a nametag
+      lol
+     */
+
     for (TempNameTag value : this.tempNameTags.values()) {
       NameTagWidget widget = new NameTagWidget(value);
       if (widget.getTempNameTag().getId() == this.selectedNameTag) {
