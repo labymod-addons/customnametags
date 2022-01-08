@@ -13,7 +13,6 @@
   top: 0;
   height: fit-content;
   space-between-entries: 2;
-  selectable: false;
 }
 
 Scroll {
@@ -81,4 +80,24 @@ NameTag {
     width: 90%;
     margin: 2 5 5 5;
   }
+}
+
+.overview-button-menu {
+  width: 90%;
+  height: 20;
+  left: 50%;
+  alignment-x: center;
+  bottom: 5;
+  layout: fill;
+  space-between-entries: 8;
+}
+
+.edit-button-menu {
+  width: 90%;
+  height: 20;
+  left: 50%;
+  alignment-x: center;
+  bottom: 0;
+  layout: fill;
+  space-between-entries: 8;
 }
