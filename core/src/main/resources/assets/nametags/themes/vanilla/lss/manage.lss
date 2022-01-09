@@ -56,3 +56,35 @@ TextField{
 .label-name {
   margin-left: 21;
 }
+
+.remove-container {
+  width: 90%;
+  height: fit-content;
+  left: 50%;
+  top: 50%;
+  alignment-x: center;
+  alignment-y: center;
+  space-between-entries: 15;
+}
+
+.remove-confirmation {
+  left: 50%;
+  alignment-x: center;
+}
+
+.remove-preview {
+  left: 50%;
+  alignment-x: center;
+  height: fit-content;
+  width: fit-content;
+}
+
+.remove-button-menu {
+  left: 50%;
+  alignment-x: center;
+  height: 20;
+  layout: fill;
+  space-between-entries: 8;
+  width: 90%;
+}
+
