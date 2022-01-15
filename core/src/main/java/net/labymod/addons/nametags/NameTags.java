@@ -1,15 +1,12 @@
 package net.labymod.addons.nametags;
 
 import com.google.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.labymod.addons.nametags.gui.activity.NameTagActivity;
 import net.labymod.api.LabyAPI;
-import net.labymod.api.client.entity.datawatcher.DataPoint;
 import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
 import net.labymod.api.configuration.loader.ConfigurationLoader;
@@ -53,19 +50,11 @@ public class NameTags {
     ConfigurationLoader configurationLoader = this.labyAPI.getConfigurationLoader();
     try {
       this.configuration = configurationLoader.load(NameTagConfiguration.class);
-      //     this.configuration.getCustomTags().put("Metafrage", CustomTag.create(true, "lol", false));
-      //    this.configuration.getCustomTags().put("JumpingPxl", CustomTag.create(true, "&4Jumping&cHatschxl", false));
-      //     configurationLoader.save(configuration);
-
       SettingsRegistry registry = this.configuration.initializeRegistry();
       this.categoryRegistry.register("nametags.settings", registry);
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-//    NavigationRegistry navigationRegistry = this.labyAPI.getNavigationService();
-//    navigationRegistry.register("nametags",
-//        this.labyAPI.getInjected(NameTagNavigationElement.class));
   }
 
   @Subscribe
@@ -99,44 +88,24 @@ public class NameTags {
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
     Player player = event.getPlayer();
-    DataPoint<TextComponent> customNameTag = player.getDataWatcher()
-        .computeIfAbsent("customNameTag", absent -> {
-          for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
-              .entrySet()) {
-            CustomTag customTag = customTagEntry.getValue();
-            if (customTag.isEnabled() && customTagEntry.getKey()
-                .equalsIgnoreCase(player.getName())) {
-              return customTag.getComponent();
-            }
-          }
+    CustomTag customTag = null;
+    for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
+        .entrySet()) {
+      CustomTag configValue = customTagEntry.getValue();
+      if (customTagEntry.getKey().equalsIgnoreCase(player.getName())) {
+        customTag = configValue;
+        break;
+      }
+    }
 
-          return null;
-        });
-
-    if (!customNameTag.isPresent()) {
+    if (Objects.isNull(customTag) || !customTag.isEnabled()) {
       return;
     }
 
-    TextComponent component = (TextComponent) event.getComponent();
-    if (component.content().contains(player.getName())) {
-      List<Component> children = new ArrayList<>();
-      children.add(customNameTag.getValue());
-      children.addAll(component.children());
-      component = Component.empty().children(children);
+    if (customTag.isReplaceScoreboard()) {
+      event.setNameTag(customTag.getCustomName());
     } else {
-      List<TextComponent> children = new ArrayList<>();
-      for (int i = 0; i < component.children().size(); i++) {
-        TextComponent childComponent = (TextComponent) component.children().get(i);
-        if (childComponent.content().contains(player.getName())) {
-          children.add(customNameTag.getValue());
-        } else {
-          children.add(childComponent);
-        }
-      }
-
-      component = component.children(children);
+      event.setNameTag(event.getNameTag().replace(player.getName(), customTag.getCustomName()));
     }
-
-    event.setComponent(component);
   }
 }
