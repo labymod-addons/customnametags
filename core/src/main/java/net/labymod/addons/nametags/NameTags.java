@@ -1,14 +1,12 @@
 package net.labymod.addons.nametags;
 
 import com.google.inject.Singleton;
-import java.util.Map.Entry;
-import java.util.Optional;
 import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.labymod.addons.nametags.gui.activity.NameTagActivity;
+import net.labymod.addons.nametags.listener.ChatReceiveListener;
 import net.labymod.addons.nametags.listener.PlayerNameTagRenderListener;
 import net.labymod.api.LabyAPI;
-import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
 import net.labymod.api.configuration.loader.ConfigurationLoader;
 import net.labymod.api.configuration.settings.SettingsRegistry;
@@ -35,7 +33,10 @@ public class NameTags {
     this.labyAPI = labyAPI;
     this.categoryRegistry = categoryRegistry;
 
-    labyAPI.getEventBus().registerListener(this, new PlayerNameTagRenderListener(this));
+    labyAPI.getEventBus()
+        .registerListener(this, this.labyAPI.getInjected(PlayerNameTagRenderListener.class));
+    labyAPI.getEventBus()
+        .registerListener(this, this.labyAPI.getInjected(ChatReceiveListener.class));
   }
 
   /**
@@ -67,9 +68,8 @@ public class NameTags {
 
     SettingOpenActivityWidget activityWidget = new SettingOpenActivityWidget(null,
         Component.text("NameTags"),
-        () -> {
-          event.getParentScreen().displayScreen(this.labyAPI.getInjected(NameTagActivity.class));
-        });
+        () -> event.getParentScreen()
+            .displayScreen(this.labyAPI.getInjected(NameTagActivity.class)));
     event.getSettings().add(activityWidget);
   }
 
@@ -87,15 +87,7 @@ public class NameTags {
     }
   }
 
-  public Optional<CustomTag> getCustomNameTag(Player player) {
-    for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
-        .entrySet()) {
-      CustomTag customTag = customTagEntry.getValue();
-      if (customTagEntry.getKey().equalsIgnoreCase(player.getName())) {
-        return Optional.of(customTag);
-      }
-    }
-
-    return Optional.empty();
+  public NameTagConfiguration getConfiguration() {
+    return this.configuration;
   }
 }
