@@ -3,6 +3,7 @@ package net.labymod.addons.nametags.listener;
 import java.util.Optional;
 import net.labymod.addons.nametags.CustomTag;
 import net.labymod.addons.nametags.NameTags;
+import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 
 public class PlayerNameTagRenderListener {
@@ -13,6 +14,7 @@ public class PlayerNameTagRenderListener {
     this.nameTags = nameTags;
   }
 
+  @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
     Optional<CustomTag> optionalCustomTag = this.nameTags.getCustomNameTag(event.getPlayer());
     if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
