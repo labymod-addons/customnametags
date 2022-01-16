@@ -2,10 +2,11 @@ package net.labymod.addons.nametags;
 
 import com.google.inject.Singleton;
 import java.util.Map.Entry;
-import java.util.Objects;
+import java.util.Optional;
 import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.labymod.addons.nametags.gui.activity.NameTagActivity;
+import net.labymod.addons.nametags.listener.PlayerNameTagRenderListener;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
@@ -16,7 +17,6 @@ import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.lifecycle.GameInitializeEvent;
 import net.labymod.api.event.client.lifecycle.GameInitializeEvent.Lifecycle;
-import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 import net.labymod.api.event.labymod.config.ConfigurationSaveEvent;
 import net.labymod.api.event.labymod.config.SettingWidgetInitializeEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
@@ -34,6 +34,8 @@ public class NameTags {
   private NameTags(LabyAPI labyAPI, SettingCategoryRegistry categoryRegistry) {
     this.labyAPI = labyAPI;
     this.categoryRegistry = categoryRegistry;
+
+    labyAPI.getEventBus().registerListener(this, new PlayerNameTagRenderListener(this));
   }
 
   /**
@@ -85,27 +87,15 @@ public class NameTags {
     }
   }
 
-  @Subscribe
-  public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
-    Player player = event.getPlayer();
-    CustomTag customTag = null;
+  public Optional<CustomTag> getCustomNameTag(Player player) {
     for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags()
         .entrySet()) {
-      CustomTag configValue = customTagEntry.getValue();
+      CustomTag customTag = customTagEntry.getValue();
       if (customTagEntry.getKey().equalsIgnoreCase(player.getName())) {
-        customTag = configValue;
-        break;
+        return Optional.of(customTag);
       }
     }
 
-    if (Objects.isNull(customTag) || !customTag.isEnabled()) {
-      return;
-    }
-
-    if (customTag.isReplaceScoreboard()) {
-      event.setNameTag(customTag.getCustomName());
-    } else {
-      event.setNameTag(event.getNameTag().replace(player.getName(), customTag.getCustomName()));
-    }
+    return Optional.empty();
   }
 }
