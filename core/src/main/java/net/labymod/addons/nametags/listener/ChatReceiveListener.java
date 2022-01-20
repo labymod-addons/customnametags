@@ -21,6 +21,10 @@ public class ChatReceiveListener {
 
   @Subscribe
   public void onChatReceive(ChatReceiveEvent event) {
+    if (!this.configuration.isEnabled()) {
+      return;
+    }
+
     Component message = event.getMessage();
     for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags().entrySet()) {
       message = message.replaceText(TextReplacementConfig.builder()

@@ -3,6 +3,8 @@ package net.labymod.addons.nametags.listener;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.inject.Inject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.nametags.CustomTag;
 import net.labymod.addons.nametags.NameTagConfiguration;
 import net.labymod.api.client.entity.player.Player;
@@ -20,6 +22,10 @@ public class PlayerNameTagRenderListener {
 
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
+    if (!this.configuration.isEnabled()) {
+      return;
+    }
+
     Optional<CustomTag> optionalCustomTag = this.getCustomNameTag(event.getPlayer());
     if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
       return;
@@ -27,10 +33,12 @@ public class PlayerNameTagRenderListener {
 
     CustomTag customTag = optionalCustomTag.get();
     if (customTag.isReplaceScoreboard()) {
-      event.setNameTag(customTag.getCustomName());
+      event.setNameTag(customTag.getComponent());
     } else {
-      event.setNameTag(event.getNameTag().replace(event.getPlayer().getName(),
-          customTag.getCustomName()));
+      event.setNameTag(event.getNameTag().replaceText(TextReplacementConfig.builder()
+          .matchLiteral(event.getPlayer().getName())
+          .replacement(Component.empty().append(customTag.getComponent()))
+          .build()));
     }
   }
 
