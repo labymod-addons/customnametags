@@ -27,12 +27,14 @@ public class ChatReceiveListener {
 
     Component message = event.getMessage();
     for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags().entrySet()) {
-      message = message.replaceText(TextReplacementConfig.builder()
-          .match("(?i)" + customTagEntry.getKey())
-          .replacement(Component.empty()
-              .append(customTagEntry.getValue().getComponent())
-              .append(PlayerNameTagRenderEvent.EDITED_COMPONENT))
-          .build());
+      if (customTagEntry.getValue().isEnabled()) {
+        message = message.replaceText(TextReplacementConfig.builder()
+            .match("(?i)" + customTagEntry.getKey())
+            .replacement(Component.empty()
+                .append(customTagEntry.getValue().getComponent())
+                .append(PlayerNameTagRenderEvent.EDITED_COMPONENT))
+            .build());
+      }
     }
 
     event.setMessage(message);
