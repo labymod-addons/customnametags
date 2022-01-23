@@ -16,6 +16,8 @@ import net.labymod.api.client.gui.screen.widget.Widget;
 import net.labymod.api.client.gui.screen.widget.widgets.ComponentWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.DivWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.input.ButtonWidget;
+import net.labymod.api.client.gui.screen.widget.widgets.input.CheckBoxWidget;
+import net.labymod.api.client.gui.screen.widget.widgets.input.CheckBoxWidget.State;
 import net.labymod.api.client.gui.screen.widget.widgets.input.TextFieldWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.FlexibleContentWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
@@ -202,10 +204,42 @@ public class NameTagActivity extends SimpleActivity {
     customNameList.addEntry(customTextField);
     this.inputWidget.addContent(customNameList);
 
-    HorizontalListWidget menu = new HorizontalListWidget();
-    menu.addId("edit-button-menu");
+    HorizontalListWidget checkBoxList = new HorizontalListWidget();
+    checkBoxList.addId("checkbox-list");
 
-    menu.addEntry(ButtonWidget.i18n("labymod.ui.button.done", () -> {
+    DivWidget enabledDiv = new DivWidget();
+    enabledDiv.addId("checkbox-div");
+
+    ComponentWidget enabledText = ComponentWidget.i18n("nametags.gui.manage.enabled.name");
+    enabledText.addId("checkbox-name");
+    enabledDiv.addChild(enabledText);
+
+    CheckBoxWidget enabledWidget = new CheckBoxWidget();
+    enabledWidget.addId("checkbox-item");
+    enabledWidget.setState(
+        nameTagWidget.getCustomTag().isEnabled() ? State.CHECKED : State.UNCHECKED);
+    enabledDiv.addChild(enabledWidget);
+    checkBoxList.addEntry(enabledDiv);
+
+    DivWidget replaceDiv = new DivWidget();
+    replaceDiv.addId("checkbox-div");
+
+    ComponentWidget replaceText = ComponentWidget.i18n("nametags.gui.manage.replace.name");
+    replaceText.addId("checkbox-name");
+    replaceDiv.addChild(replaceText);
+
+    CheckBoxWidget replaceWidget = new CheckBoxWidget();
+    replaceWidget.addId("checkbox-item");
+    replaceWidget.setState(
+        nameTagWidget.getCustomTag().isReplaceScoreboard() ? State.CHECKED : State.UNCHECKED);
+    replaceDiv.addChild(replaceWidget);
+    checkBoxList.addEntry(replaceDiv);
+    this.inputWidget.addContent(checkBoxList);
+
+    HorizontalListWidget buttonList = new HorizontalListWidget();
+    buttonList.addId("edit-button-menu");
+
+    buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.done", () -> {
       if (nameTagWidget.getUserName().length() == 0) {
         this.nameTagWidgets.put(nameTextField.getText(), nameTagWidget);
         this.nameTagList.getSession().setSelectedEntry(nameTagWidget);
@@ -214,15 +248,17 @@ public class NameTagActivity extends SimpleActivity {
       this.nameTagConfiguration.getCustomTags().remove(nameTagWidget.getUserName());
       CustomTag customTag = nameTagWidget.getCustomTag();
       customTag.setCustomName(customTextField.getText());
+      customTag.setEnabled(enabledWidget.getState() == State.CHECKED);
+      customTag.setReplaceScoreboard(replaceWidget.getState() == State.CHECKED);
       this.nameTagConfiguration.getCustomTags().put(nameTextField.getText(), customTag);
       nameTagWidget.setUserName(nameTextField.getText());
       nameTagWidget.setCustomTag(customTag);
       this.setAction(null);
     }));
 
-    menu.addEntry(ButtonWidget.i18n("labymod.ui.button.cancel", () -> this.setAction(null)));
+    buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.cancel", () -> this.setAction(null)));
     inputContainer.addChild(this.inputWidget);
-    this.inputWidget.addContent(menu);
+    this.inputWidget.addContent(buttonList);
     return inputContainer;
   }
 
