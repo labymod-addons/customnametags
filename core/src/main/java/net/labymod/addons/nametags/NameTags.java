@@ -1,7 +1,6 @@
 package net.labymod.addons.nametags;
 
 import com.google.inject.Singleton;
-import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.labymod.addons.nametags.gui.activity.NameTagActivity;
 import net.labymod.addons.nametags.listener.ChatReceiveListener;
@@ -17,6 +16,7 @@ import net.labymod.api.event.client.lifecycle.GameInitializeEvent.Lifecycle;
 import net.labymod.api.event.labymod.config.ConfigurationSaveEvent;
 import net.labymod.api.event.labymod.config.SettingWidgetInitializeEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
+import javax.inject.Inject;
 
 @AddonMain
 @Singleton
@@ -31,6 +31,7 @@ public class NameTags {
   private NameTags(LabyAPI labyAPI) {
     this.labyAPI = labyAPI;
     this.configLoader = JsonConfigLoader.createDefault();
+
     labyAPI.getEventBus()
         .registerListener(this, this.labyAPI.getInjected(PlayerNameTagRenderListener.class));
     labyAPI.getEventBus()
@@ -63,7 +64,7 @@ public class NameTags {
 
   @Subscribe
   public void onSettingWidgetInitialize(SettingWidgetInitializeEvent event) {
-    if (!event.getHolder().getId().equals("nametags.settings")) {
+    if (!event.getHolder().getPath().equals("settings.nametag")) {
       return;
     }
 
