@@ -8,9 +8,8 @@ import net.labymod.addons.nametags.listener.ChatReceiveListener;
 import net.labymod.addons.nametags.listener.PlayerNameTagRenderListener;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.SettingOpenActivityWidget;
-import net.labymod.api.configuration.loader.ConfigurationLoader;
-import net.labymod.api.configuration.settings.SettingsRegistry;
-import net.labymod.api.configuration.settings.gui.SettingCategoryRegistry;
+import net.labymod.api.configuration.loader.impl.JsonConfigLoader;
+import net.labymod.api.configuration.settings.type.SettingRegistry;
 import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.lifecycle.GameInitializeEvent;
@@ -24,15 +23,14 @@ import net.labymod.api.models.addon.annotation.AddonMain;
 public class NameTags {
 
   private final LabyAPI labyAPI;
-  private final SettingCategoryRegistry categoryRegistry;
+  private final JsonConfigLoader configLoader;
 
   private NameTagConfiguration configuration;
 
   @Inject
-  private NameTags(LabyAPI labyAPI, SettingCategoryRegistry categoryRegistry) {
+  private NameTags(LabyAPI labyAPI) {
     this.labyAPI = labyAPI;
-    this.categoryRegistry = categoryRegistry;
-
+    this.configLoader = JsonConfigLoader.createDefault();
     labyAPI.getEventBus()
         .registerListener(this, this.labyAPI.getInjected(PlayerNameTagRenderListener.class));
     labyAPI.getEventBus()
@@ -50,11 +48,14 @@ public class NameTags {
       return;
     }
 
-    ConfigurationLoader configurationLoader = this.labyAPI.getConfigurationLoader();
     try {
-      this.configuration = configurationLoader.load(NameTagConfiguration.class);
-      SettingsRegistry registry = this.configuration.initializeRegistry();
-      this.categoryRegistry.register("nametags.settings", registry);
+      this.configLoader.load(NameTagConfiguration.class);
+
+      SettingRegistry registry = SettingRegistry.namespace(this.labyAPI, this);
+      registry.addSettings(this.configuration);
+
+      // Register config in settings
+      this.labyAPI.getCoreSettingRegistry().addSetting(registry);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -62,7 +63,7 @@ public class NameTags {
 
   @Subscribe
   public void onSettingWidgetInitialize(SettingWidgetInitializeEvent event) {
-    if (!event.getLayer().getId().equals("nametags.settings")) {
+    if (!event.getHolder().getId().equals("nametags.settings")) {
       return;
     }
 
@@ -81,7 +82,7 @@ public class NameTags {
   @Subscribe
   public void onConfigurationSave(ConfigurationSaveEvent event) {
     try {
-      event.getLoader().save(this.configuration);
+      this.configLoader.save(this.configuration);
     } catch (Exception e) {
       e.printStackTrace();
     }
