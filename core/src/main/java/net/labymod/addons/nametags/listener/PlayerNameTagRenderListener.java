@@ -7,22 +7,23 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.nametags.CustomTag;
 import net.labymod.addons.nametags.NameTagConfiguration;
+import net.labymod.addons.nametags.NameTags;
 import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 
 public class PlayerNameTagRenderListener {
 
-  private final NameTagConfiguration configuration;
+  private final NameTags addon;
 
   @Inject
-  public PlayerNameTagRenderListener(NameTagConfiguration configuration) {
-    this.configuration = configuration;
+  public PlayerNameTagRenderListener(NameTags addon) {
+    this.addon = addon;
   }
 
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
-    if (!this.configuration.isEnabled()) {
+    if (!this.addon.configuration().isEnabled()) {
       return;
     }
 
@@ -43,7 +44,8 @@ public class PlayerNameTagRenderListener {
   }
 
   private Optional<CustomTag> getCustomNameTag(Player player) {
-    for (Entry<String, CustomTag> customTagEntry : this.configuration.getCustomTags().entrySet()) {
+    for (Entry<String, CustomTag> customTagEntry : this.addon.configuration().getCustomTags()
+        .entrySet()) {
       CustomTag customTag = customTagEntry.getValue();
       if (customTagEntry.getKey().equalsIgnoreCase(player.getName())) {
         return Optional.of(customTag);

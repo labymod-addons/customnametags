@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("net.labymod.gradle", "addon", "0.1.34")
+        classpath("net.labymod.gradle", "addon", "0.2.28")
     }
 }
 
@@ -65,19 +65,16 @@ createReleaseJar {
     // exclude(project(":v1_18"))
 }
 
-
 addon {
     addonInfo {
-        id("nametags")
-        displayName("CustomNameTags")
-        author("LabyMod")
+        namespace("nametags")
+        displayName("NameTags")
+        author("LabyMedia GmbH")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
-    dev {
-        releaseChannel = "feature-nametag"
+    dev{
+        releaseChannel = "improvement-addon-api"
         commitReference = "unknown"
     }
-
-    internalRelease()
 }

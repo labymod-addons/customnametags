@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "nametags": {
+      "name": "CustomNameTags",
+      "enabled": {
+        "name": "Enabled"
+      }
+    }
+  },
+  "nametags": {
+     "gui": {
+       "manage": {
+         "add": "Add a new custom Name Tag",
+         "name": "Minecraft Username",
+         "custom": {
+           "name": "New Name for this Player"
+         },
+         "enabled": {
+           "name": "Enabled"
+         },
+         "replace": {
+           "name": "Replace Prefix & Suffix"
+         },
+         "remove": {
+           "title": "Do you really want to remove this entry?"
+         }
+       }
+     }
+  }
+}

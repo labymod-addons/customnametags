@@ -12,7 +12,6 @@ import java.util.Map;
  * The name tag configuration.
  */
 @SuppressWarnings("FieldMayBeFinal")
-@Singleton
 @ConfigName("settings")
 public final class NameTagConfiguration extends Config {
 
