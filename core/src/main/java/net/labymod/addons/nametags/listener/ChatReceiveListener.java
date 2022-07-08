@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.nametags.CustomTag;
-import net.labymod.addons.nametags.NameTagConfiguration;
 import net.labymod.addons.nametags.NameTags;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;

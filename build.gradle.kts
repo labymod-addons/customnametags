@@ -73,7 +73,7 @@ addon {
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
-    dev{
+    dev {
         releaseChannel = "improvement-addon-api"
         commitReference = "unknown"
     }

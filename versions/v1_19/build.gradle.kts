@@ -54,7 +54,7 @@ intellij {
     minorMinecraftVersion(minecraftVersionTag)
     val javaVersion = project.findProperty("net.labymod.runconfig-v1_19-java-version")
 
-    if(javaVersion != null) {
+    if (javaVersion != null) {
         run {
             javaVersion(javaVersion as String)
         }

@@ -1,6 +1,9 @@
 package net.labymod.addons.nametags.gui.activity;
 
 import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.addons.nametags.CustomTag;
 import net.labymod.addons.nametags.NameTags;
@@ -26,10 +29,6 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.list.HorizontalLi
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 @AutoActivity
 @Link("manage.lss")

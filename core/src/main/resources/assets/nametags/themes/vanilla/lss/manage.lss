@@ -67,6 +67,9 @@ TextField {
   alignment-x: center;
   alignment-y: center;
   space-between-entries: 15;
+
+	background-color: rgba(20, 20, 20, 150);
+  padding: 10;
 }
 
 .remove-confirmation {
@@ -77,8 +80,8 @@ TextField {
 .remove-preview {
   left: 50%;
   alignment-x: center;
-  height: fit-content;
-  width: fit-content;
+  height: 24;
+  width: 100%;
 }
 
 .remove-button-menu {
