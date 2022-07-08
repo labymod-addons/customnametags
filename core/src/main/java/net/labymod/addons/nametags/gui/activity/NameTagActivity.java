@@ -10,7 +10,6 @@ import net.labymod.api.client.gui.screen.Parent;
 import net.labymod.api.client.gui.screen.activity.Activity;
 import net.labymod.api.client.gui.screen.activity.AutoActivity;
 import net.labymod.api.client.gui.screen.activity.Link;
-import net.labymod.api.client.gui.screen.activity.activities.labymod.child.SettingContentActivity;
 import net.labymod.api.client.gui.screen.key.InputType;
 import net.labymod.api.client.gui.screen.key.Key;
 import net.labymod.api.client.gui.screen.key.MouseButton;
@@ -26,7 +25,6 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.HorizontalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
-import net.labymod.api.configuration.settings.Setting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -70,6 +68,8 @@ public class NameTagActivity extends Activity {
         this.removeButton.setEnabled(true);
       }
     });
+
+    this.nameTagList.setDoubleClickCallback(nameTagWidget -> this.setAction(Action.EDIT));
   }
 
   @Override
@@ -105,6 +105,7 @@ public class NameTagActivity extends Activity {
     if (Objects.isNull(this.action)) {
       return;
     }
+
     DivWidget manageContainer = new DivWidget();
     manageContainer.addId("manage-container");
 
