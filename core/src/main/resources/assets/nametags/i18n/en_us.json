@@ -4,6 +4,10 @@
       "name": "CustomNameTags",
       "enabled": {
         "name": "Enabled"
+      },
+      "openNameTags": {
+        "name": "Edit Custom Name Tags",
+        "edit": "Edit"
       }
     }
   },

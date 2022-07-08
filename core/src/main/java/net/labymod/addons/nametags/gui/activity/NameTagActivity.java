@@ -1,12 +1,8 @@
 package net.labymod.addons.nametags.gui.activity;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.addons.nametags.CustomTag;
-import net.labymod.addons.nametags.NameTagConfiguration;
 import net.labymod.addons.nametags.NameTags;
 import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.LabyScreen;
@@ -14,7 +10,7 @@ import net.labymod.api.client.gui.screen.Parent;
 import net.labymod.api.client.gui.screen.activity.Activity;
 import net.labymod.api.client.gui.screen.activity.AutoActivity;
 import net.labymod.api.client.gui.screen.activity.Link;
-import net.labymod.api.client.gui.screen.activity.types.SimpleActivity;
+import net.labymod.api.client.gui.screen.activity.activities.labymod.child.SettingContentActivity;
 import net.labymod.api.client.gui.screen.key.InputType;
 import net.labymod.api.client.gui.screen.key.Key;
 import net.labymod.api.client.gui.screen.key.MouseButton;
@@ -30,7 +26,12 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.HorizontalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
+import net.labymod.api.configuration.settings.Setting;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @AutoActivity
 @Link("manage.lss")
@@ -51,7 +52,7 @@ public class NameTagActivity extends Activity {
   private Action action;
 
   @Inject
-  public NameTagActivity(NameTags addon) {
+  private NameTagActivity(NameTags addon) {
     this.addon = addon;
 
     this.nameTagWidgets = new HashMap<>();
@@ -90,7 +91,8 @@ public class NameTagActivity extends Activity {
 
     menu.addEntry(ButtonWidget.i18n("labymod.ui.button.add", () -> this.setAction(Action.ADD)));
 
-    this.editButton = ButtonWidget.i18n("labymod.ui.button.edit", () -> this.setAction(Action.EDIT));
+    this.editButton = ButtonWidget.i18n("labymod.ui.button.edit",
+        () -> this.setAction(Action.EDIT));
     this.editButton.setEnabled(Objects.nonNull(selectedNameTag));
     menu.addEntry(this.editButton);
 
