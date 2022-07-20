@@ -60,7 +60,7 @@ public class NameTagActivity extends Activity {
     this.nameTagList = new VerticalListWidget<>();
     this.nameTagList.addId("name-tag-list");
     this.nameTagList.setSelectCallback(nameTagWidget -> {
-      NameTagWidget selectedNameTag = this.nameTagList.getSession().getSelectedEntry();
+      NameTagWidget selectedNameTag = this.nameTagList.session().getSelectedEntry();
       if (Objects.isNull(selectedNameTag)
           || selectedNameTag.getCustomTag() != nameTagWidget.getCustomTag()) {
         this.editButton.setEnabled(true);
@@ -82,9 +82,9 @@ public class NameTagActivity extends Activity {
     }
 
     listContainer.addChild(new ScrollWidget(this.nameTagList));
-    this.getDocument().addChild(listContainer);
+    this.document().addChild(listContainer);
 
-    NameTagWidget selectedNameTag = this.nameTagList.getSession().getSelectedEntry();
+    NameTagWidget selectedNameTag = this.nameTagList.session().getSelectedEntry();
     HorizontalListWidget menu = new HorizontalListWidget();
     menu.addId("overview-button-menu");
 
@@ -100,7 +100,7 @@ public class NameTagActivity extends Activity {
     this.removeButton.setEnabled(Objects.nonNull(selectedNameTag));
     menu.addEntry(this.removeButton);
 
-    this.getDocument().addChild(menu);
+    this.document().addChild(menu);
     if (Objects.isNull(this.action)) {
       return;
     }
@@ -124,7 +124,7 @@ public class NameTagActivity extends Activity {
     }
 
     manageContainer.addChild(overlayWidget);
-    this.getDocument().addChild(manageContainer);
+    this.document().addChild(manageContainer);
   }
 
   private FlexibleContentWidget initializeRemoveContainer(NameTagWidget nameTagWidget) {
@@ -146,7 +146,7 @@ public class NameTagActivity extends Activity {
     menu.addEntry(ButtonWidget.i18n("labymod.ui.button.remove", () -> {
       this.addon.configuration().getCustomTags().remove(nameTagWidget.getUserName());
       this.nameTagWidgets.remove(nameTagWidget.getUserName());
-      this.nameTagList.getSession().setSelectedEntry(null);
+      this.nameTagList.session().setSelectedEntry(null);
       this.setAction(null);
     }));
 
@@ -258,14 +258,14 @@ public class NameTagActivity extends Activity {
     buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.done", () -> {
       if (nameTagWidget.getUserName().length() == 0) {
         this.nameTagWidgets.put(nameTextField.getText(), nameTagWidget);
-        this.nameTagList.getSession().setSelectedEntry(nameTagWidget);
+        this.nameTagList.session().setSelectedEntry(nameTagWidget);
       }
 
       this.addon.configuration().getCustomTags().remove(nameTagWidget.getUserName());
       CustomTag customTag = nameTagWidget.getCustomTag();
       customTag.setCustomName(customTextField.getText());
-      customTag.setEnabled(enabledWidget.getState() == State.CHECKED);
-      customTag.setReplaceScoreboard(replaceWidget.getState() == State.CHECKED);
+      customTag.setEnabled(enabledWidget.state() == State.CHECKED);
+      customTag.setReplaceScoreboard(replaceWidget.state() == State.CHECKED);
       this.addon.configuration().getCustomTags().put(nameTextField.getText(), customTag);
       nameTagWidget.setUserName(nameTextField.getText());
       nameTagWidget.setCustomTag(customTag);

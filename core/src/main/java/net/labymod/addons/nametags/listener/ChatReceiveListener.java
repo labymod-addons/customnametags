@@ -25,7 +25,7 @@ public class ChatReceiveListener {
       return;
     }
 
-    Component message = event.getMessage();
+    Component message = event.message();
     for (Entry<String, CustomTag> customTagEntry : this.addon.configuration().getCustomTags()
         .entrySet()) {
       if (customTagEntry.getValue().isEnabled()) {

@@ -25,7 +25,7 @@ public class PlayerNameTagRenderListener {
       return;
     }
 
-    String playerName = event.playerInfo().getProfile().getUsername();
+    String playerName = event.playerInfo().profile().getUsername();
     Optional<CustomTag> optionalCustomTag = this.getCustomNameTag(playerName);
     if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
       return;
