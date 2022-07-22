@@ -1,8 +1,8 @@
-package net.labymod.addons.nametags;
+package net.labymod.addons.customnametags;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.labymod.addons.nametags.gui.activity.NameTagActivity;
+import net.labymod.addons.customnametags.gui.activity.NameTagActivity;
 import net.labymod.api.client.gui.screen.activity.Activity;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.AddonActivityWidget.AddonActivitySetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
@@ -16,18 +16,18 @@ import net.labymod.api.util.MethodOrder;
  */
 @SuppressWarnings("FieldMayBeFinal")
 @ConfigName("settings")
-public final class NameTagConfiguration extends Config {
+public final class CustomNameTagsConfiguration extends Config {
 
   @SwitchSetting
   private boolean enabled = true;
 
-  private Map<String, CustomTag> customTags = new HashMap<>();
+  private Map<String, CustomNameTag> customTags = new HashMap<>();
 
   public boolean isEnabled() {
     return this.enabled;
   }
 
-  public Map<String, CustomTag> getCustomTags() {
+  public Map<String, CustomNameTag> getCustomTags() {
     return this.customTags;
   }
 

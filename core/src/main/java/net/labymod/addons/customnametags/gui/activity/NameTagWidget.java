@@ -1,7 +1,7 @@
-package net.labymod.addons.nametags.gui.activity;
+package net.labymod.addons.customnametags.gui.activity;
 
 import net.kyori.adventure.text.Component;
-import net.labymod.addons.nametags.CustomTag;
+import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.api.client.gui.icon.Icon;
 import net.labymod.api.client.gui.lss.property.annotation.AutoWidget;
 import net.labymod.api.client.gui.screen.Parent;
@@ -13,11 +13,11 @@ import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
 public class NameTagWidget extends SimpleWidget {
 
   private String userName;
-  private CustomTag customTag;
+  private CustomNameTag customNameTag;
 
-  public NameTagWidget(String userName, CustomTag customTag) {
+  public NameTagWidget(String userName, CustomNameTag customNameTag) {
     this.userName = userName;
-    this.customTag = customTag;
+    this.customNameTag = customNameTag;
   }
 
   @Override
@@ -31,7 +31,7 @@ public class NameTagWidget extends SimpleWidget {
     nameWidget.addId("name");
     this.addChild(nameWidget);
 
-    ComponentWidget customNameWidget = ComponentWidget.component(this.customTag.getComponent());
+    ComponentWidget customNameWidget = ComponentWidget.component(this.customNameTag.getComponent());
     customNameWidget.addId("custom-name");
     this.addChild(customNameWidget);
   }
@@ -48,11 +48,11 @@ public class NameTagWidget extends SimpleWidget {
     this.userName = userName;
   }
 
-  public CustomTag getCustomTag() {
-    return this.customTag;
+  public CustomNameTag getCustomTag() {
+    return this.customNameTag;
   }
 
-  public void setCustomTag(CustomTag customTag) {
-    this.customTag = customTag;
+  public void setCustomTag(CustomNameTag customNameTag) {
+    this.customNameTag = customNameTag;
   }
 }

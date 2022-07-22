@@ -1,25 +1,26 @@
-package net.labymod.addons.nametags;
+package net.labymod.addons.customnametags;
 
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-public class CustomTag {
+public class CustomNameTag {
 
   private boolean enabled;
   private String customName;
   private boolean replaceScoreboard;
 
-  private CustomTag(boolean enabled, String customName, boolean replaceScoreboard) {
+  private CustomNameTag(boolean enabled, String customName, boolean replaceScoreboard) {
     this.enabled = enabled;
     this.customName = customName;
     this.replaceScoreboard = replaceScoreboard;
   }
 
-  public static CustomTag create(boolean enabled, String customName, boolean replaceScoreboard) {
-    return new CustomTag(enabled, customName, replaceScoreboard);
+  public static CustomNameTag create(boolean enabled, String customName,
+      boolean replaceScoreboard) {
+    return new CustomNameTag(enabled, customName, replaceScoreboard);
   }
 
-  public static CustomTag createDefault() {
+  public static CustomNameTag createDefault() {
     return create(true, "", false);
   }
 

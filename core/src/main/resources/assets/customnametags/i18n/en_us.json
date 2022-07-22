@@ -1,6 +1,6 @@
 {
   "settings": {
-    "nametags": {
+    "customnametags": {
       "name": "CustomNameTags",
       "enabled": {
         "name": "Enabled"
@@ -11,7 +11,7 @@
       }
     }
   },
-  "nametags": {
+  "customnametags": {
     "gui": {
       "manage": {
         "add": "Add a new custom Name Tag",

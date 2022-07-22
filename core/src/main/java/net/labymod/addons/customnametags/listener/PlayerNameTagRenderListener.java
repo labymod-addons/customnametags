@@ -1,21 +1,21 @@
-package net.labymod.addons.nametags.listener;
+package net.labymod.addons.customnametags.listener;
 
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.labymod.addons.nametags.CustomTag;
-import net.labymod.addons.nametags.NameTags;
+import net.labymod.addons.customnametags.CustomNameTag;
+import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 
 public class PlayerNameTagRenderListener {
 
-  private final NameTags addon;
+  private final CustomNameTags addon;
 
   @Inject
-  public PlayerNameTagRenderListener(NameTags addon) {
+  public PlayerNameTagRenderListener(CustomNameTags addon) {
     this.addon = addon;
   }
 
@@ -26,28 +26,28 @@ public class PlayerNameTagRenderListener {
     }
 
     String playerName = event.playerInfo().profile().getUsername();
-    Optional<CustomTag> optionalCustomTag = this.getCustomNameTag(playerName);
+    Optional<CustomNameTag> optionalCustomTag = this.getCustomNameTag(playerName);
     if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
       return;
     }
 
-    CustomTag customTag = optionalCustomTag.get();
-    if (customTag.isReplaceScoreboard()) {
-      event.setNameTag(customTag.getComponent());
+    CustomNameTag customNameTag = optionalCustomTag.get();
+    if (customNameTag.isReplaceScoreboard()) {
+      event.setNameTag(customNameTag.getComponent());
     } else {
       event.setNameTag(event.nameTag().replaceText(TextReplacementConfig.builder()
           .matchLiteral(playerName)
-          .replacement(Component.empty().append(customTag.getComponent()))
+          .replacement(Component.empty().append(customNameTag.getComponent()))
           .build()));
     }
   }
 
-  private Optional<CustomTag> getCustomNameTag(String playerName) {
-    for (Entry<String, CustomTag> customTagEntry : this.addon.configuration().getCustomTags()
+  private Optional<CustomNameTag> getCustomNameTag(String playerName) {
+    for (Entry<String, CustomNameTag> customTagEntry : this.addon.configuration().getCustomTags()
         .entrySet()) {
-      CustomTag customTag = customTagEntry.getValue();
+      CustomNameTag customNameTag = customTagEntry.getValue();
       if (customTagEntry.getKey().equalsIgnoreCase(playerName)) {
-        return Optional.of(customTag);
+        return Optional.of(customNameTag);
       }
     }
 

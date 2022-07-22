@@ -1,12 +1,12 @@
-package net.labymod.addons.nametags.gui.activity;
+package net.labymod.addons.customnametags.gui.activity;
 
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.labymod.addons.nametags.CustomTag;
-import net.labymod.addons.nametags.NameTags;
+import net.labymod.addons.customnametags.CustomNameTag;
+import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.LabyScreen;
 import net.labymod.api.client.gui.screen.Parent;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Link("overview.lss")
 public class NameTagActivity extends Activity {
 
-  private final NameTags addon;
+  private final CustomNameTags addon;
   private final VerticalListWidget<NameTagWidget> nameTagList;
   private final Map<String, NameTagWidget> nameTagWidgets;
 
@@ -49,7 +49,7 @@ public class NameTagActivity extends Activity {
   private Action action;
 
   @Inject
-  private NameTagActivity(NameTags addon) {
+  private NameTagActivity(CustomNameTags addon) {
     this.addon = addon;
 
     this.nameTagWidgets = new HashMap<>();
@@ -112,7 +112,7 @@ public class NameTagActivity extends Activity {
     switch (this.action) {
       default:
       case ADD:
-        NameTagWidget newCustomNameTag = new NameTagWidget("", CustomTag.createDefault());
+        NameTagWidget newCustomNameTag = new NameTagWidget("", CustomNameTag.createDefault());
         overlayWidget = this.initializeManageContainer(newCustomNameTag);
         break;
       case EDIT:
@@ -131,7 +131,8 @@ public class NameTagActivity extends Activity {
     this.inputWidget = new FlexibleContentWidget();
     this.inputWidget.addId("remove-container");
 
-    ComponentWidget confirmationWidget = ComponentWidget.i18n("nametags.gui.manage.remove.title");
+    ComponentWidget confirmationWidget = ComponentWidget.i18n(
+        "customnametags.gui.manage.remove.title");
     confirmationWidget.addId("remove-confirmation");
     this.inputWidget.addContent(confirmationWidget);
 
@@ -168,7 +169,7 @@ public class NameTagActivity extends Activity {
     this.inputWidget = new FlexibleContentWidget();
     this.inputWidget.addId("input-list");
 
-    ComponentWidget labelName = ComponentWidget.i18n("nametags.gui.manage.name");
+    ComponentWidget labelName = ComponentWidget.i18n("customnametags.gui.manage.name");
     labelName.addId("label-name");
     this.inputWidget.addContent(labelName);
 
@@ -194,7 +195,7 @@ public class NameTagActivity extends Activity {
     nameList.addEntry(nameTextField);
     this.inputWidget.addContent(nameList);
 
-    ComponentWidget labelCustomName = ComponentWidget.i18n("nametags.gui.manage.custom.name");
+    ComponentWidget labelCustomName = ComponentWidget.i18n("customnametags.gui.manage.custom.name");
     labelCustomName.addId("label-name");
     this.inputWidget.addContent(labelCustomName);
 
@@ -226,7 +227,7 @@ public class NameTagActivity extends Activity {
     DivWidget enabledDiv = new DivWidget();
     enabledDiv.addId("checkbox-div");
 
-    ComponentWidget enabledText = ComponentWidget.i18n("nametags.gui.manage.enabled.name");
+    ComponentWidget enabledText = ComponentWidget.i18n("customnametags.gui.manage.enabled.name");
     enabledText.addId("checkbox-name");
     enabledDiv.addChild(enabledText);
 
@@ -240,7 +241,7 @@ public class NameTagActivity extends Activity {
     DivWidget replaceDiv = new DivWidget();
     replaceDiv.addId("checkbox-div");
 
-    ComponentWidget replaceText = ComponentWidget.i18n("nametags.gui.manage.replace.name");
+    ComponentWidget replaceText = ComponentWidget.i18n("customnametags.gui.manage.replace.name");
     replaceText.addId("checkbox-name");
     replaceDiv.addChild(replaceText);
 
@@ -262,13 +263,13 @@ public class NameTagActivity extends Activity {
       }
 
       this.addon.configuration().getCustomTags().remove(nameTagWidget.getUserName());
-      CustomTag customTag = nameTagWidget.getCustomTag();
-      customTag.setCustomName(customTextField.getText());
-      customTag.setEnabled(enabledWidget.state() == State.CHECKED);
-      customTag.setReplaceScoreboard(replaceWidget.state() == State.CHECKED);
-      this.addon.configuration().getCustomTags().put(nameTextField.getText(), customTag);
+      CustomNameTag customNameTag = nameTagWidget.getCustomTag();
+      customNameTag.setCustomName(customTextField.getText());
+      customNameTag.setEnabled(enabledWidget.state() == State.CHECKED);
+      customNameTag.setReplaceScoreboard(replaceWidget.state() == State.CHECKED);
+      this.addon.configuration().getCustomTags().put(nameTextField.getText(), customNameTag);
       nameTagWidget.setUserName(nameTextField.getText());
-      nameTagWidget.setCustomTag(customTag);
+      nameTagWidget.setCustomTag(customNameTag);
       this.setAction(null);
     }));
 

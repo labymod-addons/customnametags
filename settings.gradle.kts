@@ -1,4 +1,4 @@
-rootProject.name = "nametags-addon"
+rootProject.name = "customnametags-addon"
 
 include(":api")
 include(":core")

@@ -55,8 +55,8 @@ subprojects {
 
 addon {
     addonInfo {
-        namespace("nametags")
-        displayName("NameTags")
+        namespace("customnametags")
+        displayName("CustomNameTags")
         author("LabyMedia GmbH")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
