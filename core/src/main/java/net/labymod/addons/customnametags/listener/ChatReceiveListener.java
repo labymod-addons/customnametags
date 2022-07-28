@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
@@ -19,9 +20,9 @@ public class ChatReceiveListener {
     this.addon = addon;
   }
 
-  @Subscribe
+  @Subscribe(Priority.LATEST)
   public void onChatReceive(ChatReceiveEvent event) {
-    if (!this.addon.configuration().isEnabled()) {
+    if (!this.addon.configuration().enabled().get()) {
       return;
     }
 

@@ -21,7 +21,7 @@ public class PlayerNameTagRenderListener {
 
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
-    if (!this.addon.configuration().isEnabled()) {
+    if (!this.addon.configuration().enabled().get()) {
       return;
     }
 
