@@ -47,6 +47,7 @@ public class NameTagActivity extends Activity {
   private String lastCustomName;
 
   private Action action;
+  private boolean updateRequired;
 
   @Inject
   private NameTagActivity(CustomNameTags addon) {
@@ -149,6 +150,7 @@ public class NameTagActivity extends Activity {
       this.nameTagWidgets.remove(nameTagWidget.getUserName());
       this.nameTagList.session().setSelectedEntry(null);
       this.setAction(null);
+      this.updateRequired = true;
     }));
 
     menu.addEntry(ButtonWidget.i18n("labymod.ui.button.cancel", () -> this.setAction(null)));
@@ -271,6 +273,8 @@ public class NameTagActivity extends Activity {
       nameTagWidget.setUserName(nameTextField.getText());
       nameTagWidget.setCustomTag(customNameTag);
       this.setAction(null);
+
+      this.updateRequired = true;
     }));
 
     buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.cancel", () -> this.setAction(null)));
@@ -306,6 +310,14 @@ public class NameTagActivity extends Activity {
   @Override
   public <T extends LabyScreen> @Nullable T renew() {
     return null;
+  }
+
+  @Override
+  public void onCloseScreen() {
+    super.onCloseScreen();
+    if (this.updateRequired) {
+      this.addon.reloadTabList();
+    }
   }
 
   private enum Action {
