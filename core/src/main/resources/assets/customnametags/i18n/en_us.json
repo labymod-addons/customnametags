@@ -6,8 +6,7 @@
         "name": "Enabled"
       },
       "openNameTags": {
-        "name": "Edit Custom Name Tags",
-        "edit": "Edit"
+        "name": "Edit Custom Name Tags"
       }
     },
     "gui": {

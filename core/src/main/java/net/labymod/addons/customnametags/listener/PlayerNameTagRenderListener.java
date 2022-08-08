@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.client.network.NetworkPlayerInfo;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
 
@@ -25,7 +26,12 @@ public class PlayerNameTagRenderListener {
       return;
     }
 
-    String playerName = event.playerInfo().profile().getUsername();
+    NetworkPlayerInfo networkPlayerInfo = event.playerInfo();
+    if(networkPlayerInfo == null) {
+      return;
+    }
+
+    String playerName = networkPlayerInfo.profile().getUsername();
     Optional<CustomNameTag> optionalCustomTag = this.getCustomNameTag(playerName);
     if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
       return;

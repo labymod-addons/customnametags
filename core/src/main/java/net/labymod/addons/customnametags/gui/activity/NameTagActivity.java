@@ -185,7 +185,7 @@ public class NameTagActivity extends Activity {
 
     TextFieldWidget nameTextField = new TextFieldWidget();
     nameTextField.setText(nameTagWidget.getUserName());
-    nameTextField.setUpdateListener(newValue -> {
+    nameTextField.updateListener(newValue -> {
       if (newValue.equals(this.lastUserName)) {
         return;
       }
@@ -210,7 +210,7 @@ public class NameTagActivity extends Activity {
 
     TextFieldWidget customTextField = new TextFieldWidget();
     customTextField.setText(nameTagWidget.getCustomTag().getCustomName());
-    customTextField.setUpdateListener(newValue -> {
+    customTextField.updateListener(newValue -> {
       if (newValue.equals(this.lastCustomName)) {
         return;
       }
