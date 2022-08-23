@@ -7,6 +7,12 @@
       },
       "openNameTags": {
         "name": "Edit Custom Name Tags"
+      },
+      "hideNameTagBackground": {
+        "name": "Hide NameTag Background"
+      },
+      "color": {
+        "name": "Background Color"
       }
     },
     "gui": {

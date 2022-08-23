@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.client.entity.player.tag.event.NameTagBackgroundRenderEvent;
 import net.labymod.api.client.network.NetworkPlayerInfo;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
@@ -21,13 +22,19 @@ public class PlayerNameTagRenderListener {
   }
 
   @Subscribe
+  public void modifyNameTagBackground(NameTagBackgroundRenderEvent event) {
+    event.setCancelled(this.addon.configuration().shouldHideNameTagBackground().get());
+    event.setColor(this.addon.configuration().color().get());
+  }
+
+  @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
     if (!this.addon.configuration().enabled().get()) {
       return;
     }
 
     NetworkPlayerInfo networkPlayerInfo = event.playerInfo();
-    if(networkPlayerInfo == null) {
+    if (networkPlayerInfo == null) {
       return;
     }
 
