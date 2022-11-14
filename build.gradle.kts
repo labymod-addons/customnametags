@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("net.labymod.gradle", "addon", "0.2.42")
+        classpath("net.labymod.gradle", "addon", "0.2.51")
     }
 }
 
@@ -68,10 +68,5 @@ addon {
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
-//    dev {
-//        releaseChannel = "improvement-addon-api"
-//        commitReference = "unknown"
-//    }
-
-    internalRelease()
+    snapshotRelease()
 }
