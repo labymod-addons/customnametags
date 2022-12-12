@@ -69,4 +69,9 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
   public Activity openNameTags() {
     return LabyGuice.getInstance(NameTagActivity.class);
   }
+
+  public void removeInvalidNameTags() {
+    this.customTags.entrySet()
+        .removeIf(entry -> entry.getKey().isEmpty() || entry.getValue().getCustomName().isEmpty());
+  }
 }

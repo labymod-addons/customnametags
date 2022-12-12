@@ -30,6 +30,7 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
   @Override
   protected void enable() {
     this.registerSettingCategory();
+    this.configuration().removeInvalidNameTags();
 
     this.registerListener(ChatReceiveListener.class);
     this.registerListener(PlayerNameTagRenderListener.class);

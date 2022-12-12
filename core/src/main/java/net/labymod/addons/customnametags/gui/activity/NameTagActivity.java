@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
@@ -44,12 +45,19 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.HorizontalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
+import net.labymod.api.client.render.font.TextColorStripper;
+import net.labymod.api.inject.LabyGuice;
 import org.jetbrains.annotations.Nullable;
 
 @AutoActivity
 @Link("manage.lss")
 @Link("overview.lss")
 public class NameTagActivity extends Activity {
+
+  private static final Pattern NAME_PATTERN = Pattern.compile("[\\w]{0,16}");
+  private static final TextColorStripper TEXT_COLOR_STRIPPER = LabyGuice.getInstance(
+      TextColorStripper.class
+  );
 
   private final CustomNameTags addon;
   private final VerticalListWidget<NameTagWidget> nameTagList;
@@ -92,14 +100,13 @@ public class NameTagActivity extends Activity {
   public void initialize(Parent parent) {
     super.initialize(parent);
 
-    DivWidget listContainer = new DivWidget();
-    listContainer.addId("name-tag-container");
+    FlexibleContentWidget container = new FlexibleContentWidget();
+    container.addId("name-tag-container");
     for (NameTagWidget nameTagWidget : this.nameTagWidgets.values()) {
       this.nameTagList.addChild(nameTagWidget);
     }
 
-    listContainer.addChild(new ScrollWidget(this.nameTagList));
-    this.document().addChild(listContainer);
+    container.addFlexibleContent(new ScrollWidget(this.nameTagList));
 
     NameTagWidget selectedNameTag = this.nameTagList.session().getSelectedEntry();
     HorizontalListWidget menu = new HorizontalListWidget();
@@ -117,7 +124,8 @@ public class NameTagActivity extends Activity {
     this.removeButton.setEnabled(Objects.nonNull(selectedNameTag));
     menu.addEntry(this.removeButton);
 
-    this.document().addChild(menu);
+    container.addContent(menu);
+    this.document().addChild(container);
     if (Objects.isNull(this.action)) {
       return;
     }
@@ -176,6 +184,9 @@ public class NameTagActivity extends Activity {
   }
 
   private DivWidget initializeManageContainer(NameTagWidget nameTagWidget) {
+    TextFieldWidget customTextField = new TextFieldWidget();
+    ButtonWidget doneButton = ButtonWidget.i18n("labymod.ui.button.done");
+
     DivWidget inputContainer = new DivWidget();
     inputContainer.addId("input-container");
 
@@ -201,7 +212,11 @@ public class NameTagActivity extends Activity {
 
     TextFieldWidget nameTextField = new TextFieldWidget();
     nameTextField.setText(nameTagWidget.getUserName());
+    nameTextField.validator(newValue -> NAME_PATTERN.matcher(newValue).matches());
     nameTextField.updateListener(newValue -> {
+      doneButton.setEnabled(
+          !newValue.trim().isEmpty() && !this.getStrippedText(customTextField.getText()).isEmpty()
+      );
       if (newValue.equals(this.lastUserName)) {
         return;
       }
@@ -224,9 +239,11 @@ public class NameTagActivity extends Activity {
     placeHolder.addId("input-avatar");
     customNameList.addEntry(placeHolder);
 
-    TextFieldWidget customTextField = new TextFieldWidget();
     customTextField.setText(nameTagWidget.getCustomTag().getCustomName());
     customTextField.updateListener(newValue -> {
+      doneButton.setEnabled(
+          !this.getStrippedText(newValue).isEmpty() && !nameTextField.getText().trim().isEmpty()
+      );
       if (newValue.equals(this.lastCustomName)) {
         return;
       }
@@ -274,7 +291,11 @@ public class NameTagActivity extends Activity {
     HorizontalListWidget buttonList = new HorizontalListWidget();
     buttonList.addId("edit-button-menu");
 
-    buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.done", () -> {
+    doneButton.setEnabled(
+        !nameTextField.getText().trim().isEmpty() && !this.getStrippedText(
+            customTextField.getText()).isEmpty()
+    );
+    doneButton.setPressable(() -> {
       if (nameTagWidget.getUserName().length() == 0) {
         this.nameTagWidgets.put(nameTextField.getText(), nameTagWidget);
         this.nameTagList.session().setSelectedEntry(nameTagWidget);
@@ -286,17 +307,30 @@ public class NameTagActivity extends Activity {
       customNameTag.setEnabled(enabledWidget.state() == State.CHECKED);
       customNameTag.setReplaceScoreboard(replaceWidget.state() == State.CHECKED);
       this.addon.configuration().getCustomTags().put(nameTextField.getText(), customNameTag);
+      this.addon.configuration().removeInvalidNameTags();
+
       nameTagWidget.setUserName(nameTextField.getText());
       nameTagWidget.setCustomTag(customNameTag);
       this.setAction(null);
 
       this.updateRequired = true;
-    }));
+    });
+
+    buttonList.addEntry(doneButton);
 
     buttonList.addEntry(ButtonWidget.i18n("labymod.ui.button.cancel", () -> this.setAction(null)));
     inputContainer.addChild(this.inputWidget);
     this.inputWidget.addContent(buttonList);
     return inputContainer;
+  }
+
+  private String getStrippedText(String text) {
+    text = text.trim();
+    if (text.isEmpty()) {
+      return text;
+    }
+
+    return TEXT_COLOR_STRIPPER.stripColorCodes(text, '&');
   }
 
   @Override

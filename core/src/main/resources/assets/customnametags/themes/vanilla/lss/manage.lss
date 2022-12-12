@@ -27,9 +27,10 @@ TextField {
       top: 5;
       left: 50%;
       alignment-x: center;
-      scale: 1.5;
+      font-size: 1.5;
       padding: 2 3 2 3;
     	background-color: black;
+      min-width: 11;
     }
 
     .input-list {
@@ -111,7 +112,7 @@ TextField {
   top: 0;
   left: 50%;
   alignment-x: center;
-  scale: 0.8;
+  font-size: 0.8;
 }
 
 .checkbox-item {

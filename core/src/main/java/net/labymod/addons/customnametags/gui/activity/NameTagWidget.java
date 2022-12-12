@@ -39,6 +39,12 @@ public class NameTagWidget extends SimpleWidget {
   @Override
   public void initialize(Parent parent) {
     super.initialize(parent);
+    if(this.customNameTag.isEnabled()) {
+      this.removeId("disabled");
+    } else {
+      this.addId("disabled");
+    }
+
     IconWidget iconWidget = new IconWidget(this.getIconWidget(this.userName));
     iconWidget.addId("avatar");
     this.addChild(iconWidget);
