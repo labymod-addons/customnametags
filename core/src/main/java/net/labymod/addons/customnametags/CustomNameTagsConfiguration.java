@@ -25,6 +25,7 @@ import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.AddonA
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerWidget.ColorPickerSetting;
 import net.labymod.api.configuration.loader.annotation.ConfigName;
+import net.labymod.api.configuration.loader.annotation.Exclude;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
 import net.labymod.api.inject.LabyGuice;
 import net.labymod.api.util.Color;
@@ -46,6 +47,7 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
   @ColorPickerSetting(chroma = true)
   private final ConfigProperty<Color> color = new ConfigProperty<>(Color.ofRGB(0, 0, 0, 192));
 
+  @Exclude
   private Map<String, CustomNameTag> customTags = new HashMap<>();
 
   public ConfigProperty<Boolean> enabled() {
