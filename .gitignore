@@ -134,3 +134,4 @@ run/
 
 # LabyGradle | Addon Plugin
 build-data.txt
+/.idea/

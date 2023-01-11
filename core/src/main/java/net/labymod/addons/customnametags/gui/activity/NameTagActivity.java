@@ -63,6 +63,8 @@ public class NameTagActivity extends Activity {
   private final VerticalListWidget<NameTagWidget> nameTagList;
   private final Map<String, NameTagWidget> nameTagWidgets;
 
+  private NameTagWidget selectedNameTag;
+
   private ButtonWidget removeButton;
   private ButtonWidget editButton;
 
@@ -108,7 +110,7 @@ public class NameTagActivity extends Activity {
 
     container.addFlexibleContent(new ScrollWidget(this.nameTagList));
 
-    NameTagWidget selectedNameTag = this.nameTagList.session().getSelectedEntry();
+    selectedNameTag = this.nameTagList.session().getSelectedEntry();
     HorizontalListWidget menu = new HorizontalListWidget();
     menu.addId("overview-button-menu");
 
@@ -335,11 +337,16 @@ public class NameTagActivity extends Activity {
 
   @Override
   public boolean mouseClicked(MutableMouse mouse, MouseButton mouseButton) {
-    if (Objects.nonNull(this.action)) {
-      return this.inputWidget.mouseClicked(mouse, mouseButton);
+    try {
+      if (Objects.nonNull(this.action)) {
+        return this.inputWidget.mouseClicked(mouse, mouseButton);
+      }
+      return super.mouseClicked(mouse, mouseButton);
+    } finally {
+      selectedNameTag = this.nameTagList.session().getSelectedEntry();
+      this.removeButton.setEnabled(Objects.nonNull(selectedNameTag));
+      this.editButton.setEnabled(Objects.nonNull(selectedNameTag));
     }
-
-    return super.mouseClicked(mouse, mouseButton);
   }
 
   @Override
