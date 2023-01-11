@@ -19,11 +19,10 @@ package net.labymod.addons.customnametags.listener;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.inject.Inject;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.addons.customnametags.CustomNameTagsConfiguration;
+import net.labymod.api.client.component.Component;
 import net.labymod.api.client.entity.player.tag.event.NameTagBackgroundRenderEvent;
 import net.labymod.api.client.network.NetworkPlayerInfo;
 import net.labymod.api.event.Subscribe;
@@ -47,10 +46,6 @@ public class PlayerNameTagRenderListener {
 
   @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
-    if (!this.addon.configuration().enabled().get()) {
-      return;
-    }
-
     NetworkPlayerInfo networkPlayerInfo = event.playerInfo();
     if (networkPlayerInfo == null) {
       return;
@@ -64,12 +59,11 @@ public class PlayerNameTagRenderListener {
 
     CustomNameTag customNameTag = optionalCustomTag.get();
     if (customNameTag.isReplaceScoreboard()) {
-      event.setNameTag(customNameTag.getComponent());
+      event.setNameTag(customNameTag.displayName());
     } else {
-      event.setNameTag(event.nameTag().replaceText(TextReplacementConfig.builder()
-          .matchLiteral(playerName)
-          .replacement(Component.empty().append(customNameTag.getComponent()))
-          .build()));
+      Component newNameTag = event.nameTag().copy();
+      this.addon.replaceUsername(newNameTag, playerName, () -> customNameTag.displayName().copy());
+      event.setNameTag(newNameTag);
     }
   }
 

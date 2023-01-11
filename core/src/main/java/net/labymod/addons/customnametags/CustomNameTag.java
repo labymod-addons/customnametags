@@ -16,14 +16,15 @@
 
 package net.labymod.addons.customnametags;
 
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.labymod.api.client.component.Component;
+import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 
 public class CustomNameTag {
 
   private boolean enabled;
   private String customName;
   private boolean replaceScoreboard;
+  private Component displayName;
 
   private CustomNameTag(boolean enabled, String customName, boolean replaceScoreboard) {
     this.enabled = enabled;
@@ -53,7 +54,12 @@ public class CustomNameTag {
   }
 
   public void setCustomName(String customName) {
+    if(this.customName.equals(customName)) {
+      return;
+    }
+
     this.customName = customName;
+    this.displayName = null;
   }
 
   public boolean isReplaceScoreboard() {
@@ -64,7 +70,11 @@ public class CustomNameTag {
     this.replaceScoreboard = replaceScoreboard;
   }
 
-  public TextComponent getComponent() {
-    return LegacyComponentSerializer.legacyAmpersand().deserialize(this.getCustomName());
+  public Component displayName() {
+    if(this.displayName == null) {
+      this.displayName = LegacyComponentSerializer.legacyAmpersand().deserialize(this.customName);
+    }
+
+    return this.displayName;
   }
 }

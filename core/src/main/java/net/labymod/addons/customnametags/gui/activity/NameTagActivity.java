@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.LabyScreen;
 import net.labymod.api.client.gui.screen.Parent;
@@ -110,7 +110,7 @@ public class NameTagActivity extends Activity {
 
     container.addFlexibleContent(new ScrollWidget(this.nameTagList));
 
-    selectedNameTag = this.nameTagList.session().getSelectedEntry();
+    this.selectedNameTag = this.nameTagList.session().getSelectedEntry();
     HorizontalListWidget menu = new HorizontalListWidget();
     menu.addId("overview-button-menu");
 
@@ -118,12 +118,12 @@ public class NameTagActivity extends Activity {
 
     this.editButton = ButtonWidget.i18n("labymod.ui.button.edit",
         () -> this.setAction(Action.EDIT));
-    this.editButton.setEnabled(Objects.nonNull(selectedNameTag));
+    this.editButton.setEnabled(Objects.nonNull(this.selectedNameTag));
     menu.addEntry(this.editButton);
 
     this.removeButton = ButtonWidget.i18n("labymod.ui.button.remove",
         () -> this.setAction(Action.REMOVE));
-    this.removeButton.setEnabled(Objects.nonNull(selectedNameTag));
+    this.removeButton.setEnabled(Objects.nonNull(this.selectedNameTag));
     menu.addEntry(this.removeButton);
 
     container.addContent(menu);
@@ -193,7 +193,7 @@ public class NameTagActivity extends Activity {
     inputContainer.addId("input-container");
 
     ComponentWidget customNameWidget = ComponentWidget.component(
-        nameTagWidget.getCustomTag().getComponent());
+        nameTagWidget.getCustomTag().displayName());
     customNameWidget.addId("custom-preview");
     inputContainer.addChild(customNameWidget);
 
@@ -343,9 +343,9 @@ public class NameTagActivity extends Activity {
       }
       return super.mouseClicked(mouse, mouseButton);
     } finally {
-      selectedNameTag = this.nameTagList.session().getSelectedEntry();
-      this.removeButton.setEnabled(Objects.nonNull(selectedNameTag));
-      this.editButton.setEnabled(Objects.nonNull(selectedNameTag));
+      this.selectedNameTag = this.nameTagList.session().getSelectedEntry();
+      this.removeButton.setEnabled(Objects.nonNull(this.selectedNameTag));
+      this.editButton.setEnabled(Objects.nonNull(this.selectedNameTag));
     }
   }
 

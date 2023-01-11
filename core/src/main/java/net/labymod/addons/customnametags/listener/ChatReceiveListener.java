@@ -18,10 +18,9 @@ package net.labymod.addons.customnametags.listener;
 
 import java.util.Map.Entry;
 import javax.inject.Inject;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.client.component.Component;
 import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;
@@ -38,19 +37,22 @@ public class ChatReceiveListener {
 
   @Subscribe(Priority.LATEST)
   public void onChatReceive(ChatReceiveEvent event) {
-    if (!this.addon.configuration().enabled().get()) {
-      return;
-    }
-
     Component message = event.message();
+    boolean replaced = false;
     for (Entry<String, CustomNameTag> customTagEntry : this.addon.configuration().getCustomTags()
         .entrySet()) {
-      if (customTagEntry.getValue().isEnabled()) {
-        message = message.replaceText(
-            TextReplacementConfig.builder().match("(?i)" + customTagEntry.getKey()).replacement(
-                Component.empty().append(customTagEntry.getValue().getComponent())
-                    .append(PlayerNameTagRenderEvent.EDITED_COMPONENT)).build());
+      if (!customTagEntry.getValue().isEnabled()) {
+        continue;
       }
+
+      if (this.addon.replaceUsername(message, customTagEntry.getKey(),
+          () -> customTagEntry.getValue().displayName().copy())) {
+        replaced = true;
+      }
+    }
+
+    if (replaced) {
+      message.append(PlayerNameTagRenderEvent.EDITED_COMPONENT);
     }
 
     event.setMessage(message);

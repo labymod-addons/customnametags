@@ -39,7 +39,9 @@ import net.labymod.api.util.MethodOrder;
 public final class CustomNameTagsConfiguration extends AddonConfig {
 
   @SwitchSetting
-  private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
+  private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true).addChangeListener(
+      (property, oldValue, newValue) -> LabyGuice.getInstance(CustomNameTags.class).reloadTabList()
+  );
 
   @SwitchSetting
   private final ConfigProperty<Boolean> hideNameTagBackground = new ConfigProperty<>(false);

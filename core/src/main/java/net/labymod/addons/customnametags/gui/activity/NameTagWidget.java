@@ -16,8 +16,8 @@
 
 package net.labymod.addons.customnametags.gui.activity;
 
-import net.kyori.adventure.text.Component;
 import net.labymod.addons.customnametags.CustomNameTag;
+import net.labymod.api.client.component.Component;
 import net.labymod.api.client.gui.icon.Icon;
 import net.labymod.api.client.gui.lss.property.annotation.AutoWidget;
 import net.labymod.api.client.gui.screen.Parent;
@@ -53,7 +53,7 @@ public class NameTagWidget extends SimpleWidget {
     nameWidget.addId("name");
     this.addChild(nameWidget);
 
-    ComponentWidget customNameWidget = ComponentWidget.component(this.customNameTag.getComponent());
+    ComponentWidget customNameWidget = ComponentWidget.component(this.customNameTag.displayName());
     customNameWidget.addId("custom-name");
     this.addChild(customNameWidget);
   }
