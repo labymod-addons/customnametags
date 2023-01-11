@@ -17,7 +17,6 @@
 package net.labymod.addons.customnametags;
 
 import com.google.inject.Singleton;
-import java.util.List;
 import java.util.function.Supplier;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
 import net.labymod.addons.customnametags.listener.PlayerNameTagRenderListener;
@@ -70,9 +69,8 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
       if (next != -1) {
         replaced = true;
         textComponent.text("");
-        List<Component> children = textComponent.getChildren();
         if (next == 0 && text.length() == playerName.length()) {
-          children.add(0, customName.get());
+          component.append(0, customName.get());
         } else {
           int lastNameAt = 0;
           int childIndex = 0;
@@ -82,15 +80,15 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             }
 
             if (i > lastNameAt) {
-              children.add(childIndex++, Component.text(text.substring(lastNameAt, i)));
+              component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
             }
 
-            children.add(childIndex++, customName.get());
+            component.append(childIndex++, customName.get());
             lastNameAt = i + playerName.length();
           }
 
           if(lastNameAt < text.length()) {
-            children.add(childIndex, Component.text(text.substring(lastNameAt)));
+            component.append(childIndex, Component.text(text.substring(lastNameAt)));
           }
         }
       }
