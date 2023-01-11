@@ -24,7 +24,8 @@ public class CustomNameTag {
   private boolean enabled;
   private String customName;
   private boolean replaceScoreboard;
-  private Component displayName;
+
+  private transient Component displayName;
 
   private CustomNameTag(boolean enabled, String customName, boolean replaceScoreboard) {
     this.enabled = enabled;

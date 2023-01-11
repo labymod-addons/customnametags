@@ -19,7 +19,6 @@ package net.labymod.addons.customnametags.gui.activity;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
@@ -88,7 +87,7 @@ public class NameTagActivity extends Activity {
     this.nameTagList.addId("name-tag-list");
     this.nameTagList.setSelectCallback(nameTagWidget -> {
       NameTagWidget selectedNameTag = this.nameTagList.session().getSelectedEntry();
-      if (Objects.isNull(selectedNameTag)
+      if (selectedNameTag == null
           || selectedNameTag.getCustomTag() != nameTagWidget.getCustomTag()) {
         this.editButton.setEnabled(true);
         this.removeButton.setEnabled(true);
@@ -118,17 +117,17 @@ public class NameTagActivity extends Activity {
 
     this.editButton = ButtonWidget.i18n("labymod.ui.button.edit",
         () -> this.setAction(Action.EDIT));
-    this.editButton.setEnabled(Objects.nonNull(this.selectedNameTag));
+    this.editButton.setEnabled(this.selectedNameTag != null);
     menu.addEntry(this.editButton);
 
     this.removeButton = ButtonWidget.i18n("labymod.ui.button.remove",
         () -> this.setAction(Action.REMOVE));
-    this.removeButton.setEnabled(Objects.nonNull(this.selectedNameTag));
+    this.removeButton.setEnabled(this.selectedNameTag != null);
     menu.addEntry(this.removeButton);
 
     container.addContent(menu);
     this.document().addChild(container);
-    if (Objects.isNull(this.action)) {
+    if (this.action == null) {
       return;
     }
 
@@ -338,20 +337,21 @@ public class NameTagActivity extends Activity {
   @Override
   public boolean mouseClicked(MutableMouse mouse, MouseButton mouseButton) {
     try {
-      if (Objects.nonNull(this.action)) {
+      if (this.action != null) {
         return this.inputWidget.mouseClicked(mouse, mouseButton);
       }
+
       return super.mouseClicked(mouse, mouseButton);
     } finally {
       this.selectedNameTag = this.nameTagList.session().getSelectedEntry();
-      this.removeButton.setEnabled(Objects.nonNull(this.selectedNameTag));
-      this.editButton.setEnabled(Objects.nonNull(this.selectedNameTag));
+      this.removeButton.setEnabled(this.selectedNameTag != null);
+      this.editButton.setEnabled(this.selectedNameTag != null);
     }
   }
 
   @Override
   public boolean keyPressed(Key key, InputType type) {
-    if (key.getId() == 256 && Objects.nonNull(this.action)) {
+    if (key.getId() == 256 && this.action != null) {
       this.setAction(null);
       return true;
     }

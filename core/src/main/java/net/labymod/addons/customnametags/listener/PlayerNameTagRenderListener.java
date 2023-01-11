@@ -59,7 +59,7 @@ public class PlayerNameTagRenderListener {
 
     CustomNameTag customNameTag = optionalCustomTag.get();
     if (customNameTag.isReplaceScoreboard()) {
-      event.setNameTag(customNameTag.displayName());
+      event.setNameTag(customNameTag.displayName().copy());
     } else {
       Component newNameTag = event.nameTag().copy();
       this.addon.replaceUsername(newNameTag, playerName, () -> customNameTag.displayName().copy());
