@@ -17,7 +17,6 @@
 package net.labymod.addons.customnametags.listener;
 
 import java.util.Map.Entry;
-import javax.inject.Inject;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.api.client.component.Component;
@@ -30,7 +29,6 @@ public class ChatReceiveListener {
 
   private final CustomNameTags addon;
 
-  @Inject
   public ChatReceiveListener(CustomNameTags addon) {
     this.addon = addon;
   }

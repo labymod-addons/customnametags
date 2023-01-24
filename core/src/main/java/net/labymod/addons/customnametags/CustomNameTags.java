@@ -16,7 +16,6 @@
 
 package net.labymod.addons.customnametags;
 
-import com.google.inject.Singleton;
 import java.util.function.Supplier;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
 import net.labymod.addons.customnametags.listener.PlayerNameTagRenderListener;
@@ -24,19 +23,28 @@ import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.event.client.scoreboard.TabListUpdateEvent;
-import net.labymod.api.models.addon.annotation.AddonListener;
+import net.labymod.api.models.addon.annotation.AddonMain;
 
-@AddonListener
-@Singleton
+@AddonMain
 public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
+
+  private static CustomNameTags instance;
+
+  public CustomNameTags() {
+    instance = this;
+  }
+
+  public static CustomNameTags get() {
+    return instance;
+  }
 
   @Override
   protected void enable() {
     this.registerSettingCategory();
     this.configuration().removeInvalidNameTags();
 
-    this.registerListener(ChatReceiveListener.class);
-    this.registerListener(PlayerNameTagRenderListener.class);
+    this.registerListener(new ChatReceiveListener(this));
+    this.registerListener(new PlayerNameTagRenderListener(this));
 
     if (this.wasLoadedInRuntime()) {
       this.reloadTabList();

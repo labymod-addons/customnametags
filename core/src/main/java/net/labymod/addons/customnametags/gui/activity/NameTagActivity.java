@@ -16,12 +16,12 @@
 
 package net.labymod.addons.customnametags.gui.activity;
 
-import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
+import net.labymod.api.Laby;
 import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.LabyScreen;
@@ -45,7 +45,6 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.list.HorizontalLi
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.renderer.IconWidget;
 import net.labymod.api.client.render.font.TextColorStripper;
-import net.labymod.api.inject.LabyGuice;
 import org.jetbrains.annotations.Nullable;
 
 @AutoActivity
@@ -54,9 +53,8 @@ import org.jetbrains.annotations.Nullable;
 public class NameTagActivity extends Activity {
 
   private static final Pattern NAME_PATTERN = Pattern.compile("[\\w]{0,16}");
-  private static final TextColorStripper TEXT_COLOR_STRIPPER = LabyGuice.getInstance(
-      TextColorStripper.class
-  );
+  private static final TextColorStripper TEXT_COLOR_STRIPPER = Laby.references()
+      .textColorStripper();
 
   private final CustomNameTags addon;
   private final VerticalListWidget<NameTagWidget> nameTagList;
@@ -74,12 +72,11 @@ public class NameTagActivity extends Activity {
   private Action action;
   private boolean updateRequired;
 
-  @Inject
-  private NameTagActivity(CustomNameTags addon) {
-    this.addon = addon;
+  public NameTagActivity() {
+    this.addon = CustomNameTags.get();
 
     this.nameTagWidgets = new HashMap<>();
-    addon.configuration().getCustomTags().forEach((userName, customTag) -> {
+    this.addon.configuration().getCustomTags().forEach((userName, customTag) -> {
       this.nameTagWidgets.put(userName, new NameTagWidget(userName, customTag));
     });
 
@@ -142,10 +139,10 @@ public class NameTagActivity extends Activity {
         overlayWidget = this.initializeManageContainer(newCustomNameTag);
         break;
       case EDIT:
-        overlayWidget = this.initializeManageContainer(selectedNameTag);
+        overlayWidget = this.initializeManageContainer(this.selectedNameTag);
         break;
       case REMOVE:
-        overlayWidget = this.initializeRemoveContainer(selectedNameTag);
+        overlayWidget = this.initializeRemoveContainer(this.selectedNameTag);
         break;
     }
 

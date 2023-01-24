@@ -27,7 +27,6 @@ import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerW
 import net.labymod.api.configuration.loader.annotation.ConfigName;
 import net.labymod.api.configuration.loader.annotation.Exclude;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
-import net.labymod.api.inject.LabyGuice;
 import net.labymod.api.util.Color;
 import net.labymod.api.util.MethodOrder;
 
@@ -40,13 +39,13 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
 
   @SwitchSetting
   private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true).addChangeListener(
-      (property, oldValue, newValue) -> LabyGuice.getInstance(CustomNameTags.class).reloadTabList()
+      (property, oldValue, newValue) -> CustomNameTags.get().reloadTabList()
   );
 
   @SwitchSetting
   private final ConfigProperty<Boolean> hideNameTagBackground = new ConfigProperty<>(false);
 
-  @ColorPickerSetting(chroma = true)
+  @ColorPickerSetting(chroma = true, removeAlpha = false)
   private final ConfigProperty<Color> color = new ConfigProperty<>(Color.ofRGB(0, 0, 0, 192));
 
   @Exclude
@@ -71,7 +70,7 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
   @MethodOrder(after = "enabled")
   @AddonActivitySetting
   public Activity openNameTags() {
-    return LabyGuice.getInstance(NameTagActivity.class);
+    return new NameTagActivity();
   }
 
   public void removeInvalidNameTags() {

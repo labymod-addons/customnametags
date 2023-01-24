@@ -18,7 +18,6 @@ package net.labymod.addons.customnametags.listener;
 
 import java.util.Map.Entry;
 import java.util.Optional;
-import javax.inject.Inject;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.addons.customnametags.CustomNameTagsConfiguration;
@@ -32,7 +31,6 @@ public class PlayerNameTagRenderListener {
 
   private final CustomNameTags addon;
 
-  @Inject
   public PlayerNameTagRenderListener(CustomNameTags addon) {
     this.addon = addon;
   }
