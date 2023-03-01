@@ -27,6 +27,7 @@ import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerW
 import net.labymod.api.configuration.loader.annotation.ConfigName;
 import net.labymod.api.configuration.loader.annotation.Exclude;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
+import net.labymod.api.configuration.settings.annotation.SettingSection;
 import net.labymod.api.util.Color;
 import net.labymod.api.util.MethodOrder;
 
@@ -43,6 +44,13 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
   );
 
   @SwitchSetting
+  private final ConfigProperty<Boolean> checkForStringInTabList = new ConfigProperty<>(true)
+      .addChangeListener(
+          (property, oldValue, newValue) -> CustomNameTags.get().reloadTabList()
+      );
+
+  @SettingSection("background")
+  @SwitchSetting
   private final ConfigProperty<Boolean> hideNameTagBackground = new ConfigProperty<>(false);
 
   @ColorPickerSetting(chroma = true, removeAlpha = false)
@@ -51,8 +59,13 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
   @Exclude
   private Map<String, CustomNameTag> customTags = new HashMap<>();
 
+  @Override
   public ConfigProperty<Boolean> enabled() {
     return this.enabled;
+  }
+
+  public ConfigProperty<Boolean> checkForStringInTabList() {
+    return this.checkForStringInTabList;
   }
 
   public ConfigProperty<Boolean> shouldHideNameTagBackground() {
@@ -67,7 +80,7 @@ public final class CustomNameTagsConfiguration extends AddonConfig {
     return this.customTags;
   }
 
-  @MethodOrder(after = "enabled")
+  @MethodOrder(before = "checkForStringInTabList")
   @AddonActivitySetting
   public Activity openNameTags() {
     return new NameTagActivity();

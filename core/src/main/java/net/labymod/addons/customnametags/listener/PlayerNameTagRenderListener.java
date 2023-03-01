@@ -17,15 +17,16 @@
 package net.labymod.addons.customnametags.listener;
 
 import java.util.Map.Entry;
-import java.util.Optional;
+import java.util.Set;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
-import net.labymod.addons.customnametags.CustomNameTagsConfiguration;
 import net.labymod.api.client.component.Component;
-import net.labymod.api.client.entity.player.tag.event.NameTagBackgroundRenderEvent;
+import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.network.NetworkPlayerInfo;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.PlayerNameTagRenderEvent;
+import net.labymod.api.event.client.render.PlayerNameTagRenderEvent.Context;
+import net.labymod.api.util.Pair;
 
 public class PlayerNameTagRenderListener {
 
@@ -36,26 +37,37 @@ public class PlayerNameTagRenderListener {
   }
 
   @Subscribe
-  public void modifyNameTagBackground(NameTagBackgroundRenderEvent event) {
-    CustomNameTagsConfiguration configuration = this.addon.configuration();
-    event.setCancelled(configuration.shouldHideNameTagBackground().get());
-    event.setColor(configuration.color().get().get());
-  }
-
-  @Subscribe
   public void onPlayerNameTagRender(PlayerNameTagRenderEvent event) {
     NetworkPlayerInfo networkPlayerInfo = event.playerInfo();
     if (networkPlayerInfo == null) {
       return;
     }
 
-    String playerName = networkPlayerInfo.profile().getUsername();
-    Optional<CustomNameTag> optionalCustomTag = this.getCustomNameTag(playerName);
-    if (!optionalCustomTag.isPresent() || !optionalCustomTag.get().isEnabled()) {
+    String playerName;
+    CustomNameTag customNameTag;
+    if (event.context() == Context.TAB_LIST && this.addon.configuration().checkForStringInTabList()
+        .get()) {
+      Pair<String, CustomNameTag> pair = this.getCustomNameTag(
+          this.addon.configuration().getCustomTags().entrySet(),
+          event.nameTag()
+      );
+
+      if (pair == null) {
+        playerName = null;
+        customNameTag = null;
+      } else {
+        playerName = pair.getFirst();
+        customNameTag = pair.getSecond();
+      }
+    } else {
+      playerName = networkPlayerInfo.profile().getUsername();
+      customNameTag = this.getCustomNameTag(playerName);
+    }
+
+    if (customNameTag == null || !customNameTag.isEnabled()) {
       return;
     }
 
-    CustomNameTag customNameTag = optionalCustomTag.get();
     if (customNameTag.isReplaceScoreboard()) {
       event.setNameTag(customNameTag.displayName().copy());
     } else {
@@ -65,15 +77,45 @@ public class PlayerNameTagRenderListener {
     }
   }
 
-  private Optional<CustomNameTag> getCustomNameTag(String playerName) {
+  private CustomNameTag getCustomNameTag(String playerName) {
     for (Entry<String, CustomNameTag> customTagEntry : this.addon.configuration().getCustomTags()
         .entrySet()) {
       CustomNameTag customNameTag = customTagEntry.getValue();
       if (customTagEntry.getKey().equalsIgnoreCase(playerName)) {
-        return Optional.of(customNameTag);
+        return customNameTag;
       }
     }
 
-    return Optional.empty();
+    return null;
+  }
+
+  private Pair<String, CustomNameTag> getCustomNameTag(
+      Set<Entry<String, CustomNameTag>> customNameTags,
+      Component component
+  ) {
+    for (Component child : component.getChildren()) {
+      Pair<String, CustomNameTag> pair = this.getCustomNameTag(
+          customNameTags,
+          child
+      );
+
+      if (pair != null) {
+        return pair;
+      }
+    }
+
+    if (!(component instanceof TextComponent)) {
+      return null;
+    }
+
+    TextComponent textComponent = (TextComponent) component;
+    String text = textComponent.getText().toLowerCase();
+    for (Entry<String, CustomNameTag> customNameTag : customNameTags) {
+      if (text.contains(customNameTag.getKey().toLowerCase())) {
+        return Pair.of(customNameTag.getKey(), customNameTag.getValue());
+      }
+    }
+
+    return null;
   }
 }

@@ -8,11 +8,20 @@
       "openNameTags": {
         "name": "Edit Custom Name Tags"
       },
+      "checkForStringInTabList": {
+        "name": "Check for Name in Tab List",
+        "description": "This may be very resource-intensive when having a lot of custom name tags configured, but it ensures that CustomNameTags works on every server like intended. Disabling this might result in better performance, but CustomNameTags will no longer work in the tab list on servers that modify the tab list a ton (for example on Hypixel SkyBlock)."
+      },
       "hideNameTagBackground": {
         "name": "Hide NameTag Background"
       },
       "color": {
         "name": "Background Color"
+      },
+      "header": {
+        "background": {
+          "name": "Background"
+        }
       }
     },
     "gui": {

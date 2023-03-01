@@ -18,6 +18,7 @@ package net.labymod.addons.customnametags;
 
 import java.util.function.Supplier;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
+import net.labymod.addons.customnametags.listener.NameTagBackgroundRenderListener;
 import net.labymod.addons.customnametags.listener.PlayerNameTagRenderListener;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
@@ -44,6 +45,7 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     this.configuration().removeInvalidNameTags();
 
     this.registerListener(new ChatReceiveListener(this));
+    this.registerListener(new NameTagBackgroundRenderListener(this));
     this.registerListener(new PlayerNameTagRenderListener(this));
 
     if (this.wasLoadedInRuntime()) {

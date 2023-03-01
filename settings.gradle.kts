@@ -1,7 +1,7 @@
 rootProject.name = "customnametags"
 
 pluginManagement {
-    val labyGradlePluginVersion = "0.3.7"
+    val labyGradlePluginVersion = "0.3.18"
     plugins {
         id("net.labymod.gradle") version (labyGradlePluginVersion)
     }
@@ -11,6 +11,7 @@ pluginManagement {
             maven("https://dist.labymod.net/api/v1/maven/release/")
             maven("https://repo.spongepowered.org/repository/maven-public")
             mavenCentral()
+            mavenLocal()
         }
 
         dependencies {
