@@ -23,6 +23,7 @@ import net.labymod.addons.customnametags.listener.PlayerNameTagRenderListener;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
+import net.labymod.api.client.component.TranslatableComponent;
 import net.labymod.api.event.client.scoreboard.TabListUpdateEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
@@ -68,6 +69,14 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     for (Component child : component.getChildren()) {
       if (this.replaceUsername(child, playerName, customName)) {
         replaced = true;
+      }
+    }
+
+    if (component instanceof TranslatableComponent) {
+      for (Component argument : ((TranslatableComponent) component).getArguments()) {
+        if (this.replaceUsername(argument, playerName, customName)) {
+          replaced = true;
+        }
       }
     }
 
