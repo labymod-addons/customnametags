@@ -22,6 +22,15 @@ public class CustomNameTagsLegacyConverter extends LegacyConverter<JsonObject> {
   protected void convert(JsonObject jsonObject) {
     CustomNameTagsConfiguration configuration = this.addon.configuration();
 
+    JsonObject labymodSettings =
+        this.fromJson(LEGACY_PATH.resolve("LabyMod-3.json"), JsonObject.class);
+
+    configuration.enabled().set(
+        labymodSettings != null
+            && labymodSettings.has("tags")
+            && labymodSettings.get("tags").getAsBoolean()
+    );
+
     for (Entry<String, JsonElement> entry : jsonObject.get("tags").getAsJsonObject().entrySet()) {
       CustomNameTag tag = CustomNameTag.create(
           true,
