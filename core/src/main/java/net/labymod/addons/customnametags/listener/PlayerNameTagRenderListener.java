@@ -72,7 +72,11 @@ public class PlayerNameTagRenderListener {
       event.setNameTag(customNameTag.displayName().copy());
     } else {
       Component newNameTag = event.nameTag().copy();
-      this.addon.replaceUsername(newNameTag, playerName, () -> customNameTag.displayName().copy());
+      this.addon.replaceUsername(
+          newNameTag,
+          playerName,
+          () -> customNameTag.displayName().copy()
+      );
       event.setNameTag(newNameTag);
     }
   }
@@ -104,14 +108,13 @@ public class PlayerNameTagRenderListener {
       }
     }
 
-    if (!(component instanceof TextComponent)) {
+    if (!(component instanceof TextComponent textComponent)) {
       return null;
     }
 
-    TextComponent textComponent = (TextComponent) component;
     String text = textComponent.getText().toLowerCase();
     for (Entry<String, CustomNameTag> customNameTag : customNameTags) {
-      if (text.contains(customNameTag.getKey().toLowerCase())) {
+      if (text.endsWith(customNameTag.getKey().toLowerCase())) {
         return Pair.of(customNameTag.getKey(), customNameTag.getValue());
       }
     }

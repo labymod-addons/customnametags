@@ -16,10 +16,13 @@
 
 package net.labymod.addons.customnametags.listener;
 
+import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.Set;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.api.client.component.Component;
+import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;
@@ -37,14 +40,38 @@ public class ChatReceiveListener {
   public void onChatReceive(ChatReceiveEvent event) {
     Component message = event.message();
     boolean replaced = false;
-    for (Entry<String, CustomNameTag> customTagEntry : this.addon.configuration().getCustomTags()
-        .entrySet()) {
+
+    Set<Entry<String, CustomNameTag>> entries = this.addon.configuration().getCustomTags()
+        .entrySet();
+    boolean hasName = false;
+    String formattedText = event.chatMessage().getFormattedText();
+    String lowercaseFormattedText = formattedText.toLowerCase(Locale.ROOT);
+    for (Entry<String, CustomNameTag> entry : entries) {
+      if (entry.getValue().isEnabled() && lowercaseFormattedText.contains(
+          entry.getKey().toLowerCase(Locale.ROOT))) {
+        hasName = true;
+        break;
+      }
+    }
+
+    if (!hasName) {
+      return;
+    }
+
+    if (formattedText.indexOf('§') != -1) {
+      message = LegacyComponentSerializer.legacySection().deserialize(formattedText);
+    }
+
+    for (Entry<String, CustomNameTag> customTagEntry : entries) {
       if (!customTagEntry.getValue().isEnabled()) {
         continue;
       }
 
-      if (this.addon.replaceUsername(message, customTagEntry.getKey(),
-          () -> customTagEntry.getValue().displayName().copy())) {
+      if (this.addon.replaceUsername(
+          message,
+          customTagEntry.getKey(),
+          () -> customTagEntry.getValue().displayName().copy()
+      )) {
         replaced = true;
       }
     }

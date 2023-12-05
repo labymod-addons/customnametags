@@ -85,6 +85,7 @@ NameTag {
   bottom: 5;
   layout: fill;
   space-between-entries: 8;
+  margin-bottom: 5;
 }
 
 .edit-button-menu {

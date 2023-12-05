@@ -19,7 +19,7 @@ labyMod {
     }
 
     minecraft {
-        registerVersions("1.8.9", "1.17.1", "1.18.2", "1.19.2", "1.19.3") { version, provider ->
+        registerVersions("1.20.1") { version, provider ->
             configureRun(provider, version)
         }
 
@@ -31,7 +31,7 @@ labyMod {
     }
 
     addonDev {
-        internalRelease()
+        productionRelease()
     }
 }
 
@@ -61,14 +61,6 @@ fun configureRun(provider: net.labymod.gradle.core.minecraft.provider.VersionPro
     }
 
     provider.javaVersion = when (gameVersion) {
-        "1.8.9", "1.12.2", "1.16.5" -> {
-            JavaVersion.VERSION_1_8
-        }
-
-        "1.17.1" -> {
-            JavaVersion.VERSION_16
-        }
-
         else -> {
             JavaVersion.VERSION_17
         }

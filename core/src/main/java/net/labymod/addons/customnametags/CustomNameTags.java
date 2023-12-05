@@ -24,7 +24,7 @@ import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.TranslatableComponent;
-import net.labymod.api.event.client.scoreboard.TabListUpdateEvent;
+import net.labymod.api.event.client.gui.screen.playerlist.PlayerListUpdateEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
 @AddonMain
@@ -60,11 +60,14 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
   }
 
   public void reloadTabList() {
-    this.labyAPI().eventBus().fire(new TabListUpdateEvent());
+    this.labyAPI().eventBus().fire(new PlayerListUpdateEvent());
   }
 
-  public boolean replaceUsername(Component component, String playerName,
-      Supplier<Component> customName) {
+  public boolean replaceUsername(
+      Component component,
+      String playerName,
+      Supplier<Component> customName
+  ) {
     boolean replaced = false;
     for (Component child : component.getChildren()) {
       if (this.replaceUsername(child, playerName, customName)) {
@@ -80,35 +83,44 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
       }
     }
 
-    if (component instanceof TextComponent) {
-      TextComponent textComponent = (TextComponent) component;
+    if (component instanceof TextComponent textComponent) {
       String text = textComponent.getText();
 
       int next = text.indexOf(playerName);
       if (next != -1) {
         replaced = true;
+        int length = text.length();
+        if (next == 0) {
+          if (length == playerName.length()) {
+            textComponent.text("");
+            component.append(0, customName.get());
+            return true;
+          }
+
+          if (length > playerName.length() && text.charAt(playerName.length()) != ' ') {
+            return false;
+          }
+        }
+
         textComponent.text("");
-        if (next == 0 && text.length() == playerName.length()) {
-          component.append(0, customName.get());
-        } else {
-          int lastNameAt = 0;
-          int childIndex = 0;
-          for (int i = 0; i < text.length(); i++) {
-            if (i != next) {
-              continue;
-            }
-
-            if (i > lastNameAt) {
-              component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
-            }
-
-            component.append(childIndex++, customName.get());
-            lastNameAt = i + playerName.length();
+        int lastNameAt = 0;
+        int childIndex = 0;
+        for (int i = 0; i < length; i++) {
+          if (i != next) {
+            continue;
           }
 
-          if(lastNameAt < text.length()) {
-            component.append(childIndex, Component.text(text.substring(lastNameAt)));
+          if (i > lastNameAt) {
+            component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
           }
+
+          component.append(childIndex++, customName.get());
+          lastNameAt = i + playerName.length();
+        }
+
+        // no way to properly check for this in chat
+        if (lastNameAt < length) {
+          component.append(childIndex, Component.text(text.substring(lastNameAt)));
         }
       }
     }

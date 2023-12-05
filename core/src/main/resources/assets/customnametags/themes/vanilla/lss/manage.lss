@@ -30,8 +30,9 @@ TextField {
       alignment-x: center;
       font-size: 1.5;
       padding: 2 3 2 3;
-    	background-color: black;
+      background-color: black;
       min-width: 11;
+      max-width: 100%;
     }
 
     .input-list {

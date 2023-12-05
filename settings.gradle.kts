@@ -1,7 +1,7 @@
 rootProject.name = "customnametags"
 
 pluginManagement {
-    val labyGradlePluginVersion = "0.3.18"
+    val labyGradlePluginVersion = "0.3.38"
     plugins {
         id("net.labymod.gradle") version (labyGradlePluginVersion)
     }
