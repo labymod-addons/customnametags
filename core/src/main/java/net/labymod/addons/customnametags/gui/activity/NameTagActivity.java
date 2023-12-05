@@ -209,6 +209,7 @@ public class NameTagActivity extends Activity {
     nameList.addEntry(iconWidget);
 
     TextFieldWidget nameTextField = new TextFieldWidget();
+    nameTextField.maximalLength(16);
     nameTextField.setText(nameTagWidget.getUserName());
     nameTextField.validator(newValue -> NAME_PATTERN.matcher(newValue).matches());
     nameTextField.updateListener(newValue -> {
@@ -237,6 +238,7 @@ public class NameTagActivity extends Activity {
     placeHolder.addId("input-avatar");
     customNameList.addEntry(placeHolder);
 
+    customTextField.maximalLength(64);
     customTextField.setText(nameTagWidget.getCustomTag().getCustomName());
     customTextField.updateListener(newValue -> {
       doneButton.setEnabled(
