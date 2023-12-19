@@ -96,10 +96,6 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             component.append(0, customName.get());
             return true;
           }
-
-          if (length > playerName.length() && text.charAt(playerName.length()) != ' ') {
-            return false;
-          }
         }
 
         textComponent.text("");
@@ -110,12 +106,32 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             continue;
           }
 
+          int nameEndsAt = i + playerName.length();
+
+          // Replace the name multiple times in the same text component
+          next = text.indexOf(playerName, nameEndsAt);
+
+          // Skip when player name is not at the start and the character in front of name is a space
+          if (i != 0 && text.charAt(i - 1) != ' ') {
+            continue;
+          }
+
+          // Skip when player name is not at the end and the character after the name is a space
+          if (nameEndsAt < length && text.charAt(nameEndsAt) != ' ') {
+            continue;
+          }
+
           if (i > lastNameAt) {
             component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
           }
 
           component.append(childIndex++, customName.get());
-          lastNameAt = i + playerName.length();
+          lastNameAt = nameEndsAt;
+
+          // Skip unnecessary loop
+          if (next == -1) {
+            break;
+          }
         }
 
         // no way to properly check for this in chat
