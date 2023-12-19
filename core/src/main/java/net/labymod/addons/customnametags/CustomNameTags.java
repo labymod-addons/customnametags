@@ -24,6 +24,7 @@ import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.TranslatableComponent;
+import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.event.client.gui.screen.playerlist.PlayerListUpdateEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
@@ -142,5 +143,25 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     }
 
     return replaced;
+  }
+
+  public Component replaceLegacyContext(Component component) {
+    component.setChildren(component.getChildren()
+        .stream().map(this::replaceLegacyContext).toList());
+
+    if (component instanceof TranslatableComponent translatableComponent) {
+      translatableComponent.arguments(translatableComponent.getArguments()
+          .stream().map(this::replaceLegacyContext).toList());
+    }
+
+    if (component instanceof TextComponent textComponent) {
+      String text = textComponent.getText();
+
+      if (text.indexOf('§') != -1) {
+        component = LegacyComponentSerializer.legacySection().deserialize(text);
+      }
+    }
+
+    return component;
   }
 }

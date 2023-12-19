@@ -60,7 +60,7 @@ public class ChatReceiveListener {
       return;
     }
 
-    message = replaceLegacyContext(message);
+    message = this.addon.replaceLegacyContext(message);
 
     for (Entry<String, CustomNameTag> customTagEntry : entries) {
       if (!customTagEntry.getValue().isEnabled()) {
@@ -81,25 +81,5 @@ public class ChatReceiveListener {
     }
 
     event.setMessage(message);
-  }
-
-  private Component replaceLegacyContext(Component component) {
-    component.setChildren(component.getChildren()
-        .stream().map(this::replaceLegacyContext).toList());
-
-    if (component instanceof TranslatableComponent translatableComponent) {
-      translatableComponent.arguments(translatableComponent.getArguments()
-          .stream().map(this::replaceLegacyContext).toList());
-    }
-
-    if (component instanceof TextComponent textComponent) {
-      String text = textComponent.getText();
-
-      if (text.indexOf('§') != -1) {
-        component = LegacyComponentSerializer.legacySection().deserialize(text);
-      }
-    }
-
-    return component;
   }
 }

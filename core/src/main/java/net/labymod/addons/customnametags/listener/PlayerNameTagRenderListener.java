@@ -71,7 +71,7 @@ public class PlayerNameTagRenderListener {
     if (customNameTag.isReplaceScoreboard()) {
       event.setNameTag(customNameTag.displayName().copy());
     } else {
-      Component newNameTag = event.nameTag().copy();
+      Component newNameTag = this.addon.replaceLegacyContext(event.nameTag().copy());
       this.addon.replaceUsername(
           newNameTag,
           playerName,
