@@ -22,6 +22,8 @@ import java.util.Set;
 import net.labymod.addons.customnametags.CustomNameTag;
 import net.labymod.addons.customnametags.CustomNameTags;
 import net.labymod.api.client.component.Component;
+import net.labymod.api.client.component.TextComponent;
+import net.labymod.api.client.component.TranslatableComponent;
 import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
@@ -58,9 +60,7 @@ public class ChatReceiveListener {
       return;
     }
 
-    if (formattedText.indexOf('§') != -1) {
-      message = LegacyComponentSerializer.legacySection().deserialize(formattedText);
-    }
+    message = replaceLegacyContext(message);
 
     for (Entry<String, CustomNameTag> customTagEntry : entries) {
       if (!customTagEntry.getValue().isEnabled()) {
@@ -81,5 +81,25 @@ public class ChatReceiveListener {
     }
 
     event.setMessage(message);
+  }
+
+  private Component replaceLegacyContext(Component component) {
+    component.setChildren(component.getChildren()
+        .stream().map(this::replaceLegacyContext).toList());
+
+    if (component instanceof TranslatableComponent translatableComponent) {
+      translatableComponent.arguments(translatableComponent.getArguments()
+          .stream().map(this::replaceLegacyContext).toList());
+    }
+
+    if (component instanceof TextComponent textComponent) {
+      String text = textComponent.getText();
+
+      if (text.indexOf('§') != -1) {
+        component = LegacyComponentSerializer.legacySection().deserialize(text);
+      }
+    }
+
+    return component;
   }
 }
