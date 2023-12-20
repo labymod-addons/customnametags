@@ -24,6 +24,8 @@ import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.TranslatableComponent;
+import net.labymod.api.client.component.format.Style;
+import net.labymod.api.client.component.format.Style.Merge.Strategy;
 import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.event.client.gui.screen.playerlist.PlayerListUpdateEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
@@ -158,7 +160,9 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
       String text = textComponent.getText();
 
       if (text.indexOf('§') != -1) {
+        Style style = component.style();
         component = LegacyComponentSerializer.legacySection().deserialize(text);
+        component.style(component.style().merge(style, Strategy.IF_ABSENT_ON_TARGET));
       }
     }
 
