@@ -112,9 +112,9 @@ public class PlayerNameTagRenderListener {
       return null;
     }
 
-    String text = textComponent.getText().toLowerCase();
+    String text = textComponent.getText().toLowerCase().trim();
     for (Entry<String, CustomNameTag> customNameTag : customNameTags) {
-      if (text.trim().endsWith(customNameTag.getKey().toLowerCase())) {
+      if (text.endsWith(customNameTag.getKey().toLowerCase())) {
         return Pair.of(customNameTag.getKey(), customNameTag.getValue());
       }
     }
