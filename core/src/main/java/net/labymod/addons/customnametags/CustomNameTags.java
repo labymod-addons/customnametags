@@ -16,6 +16,8 @@
 
 package net.labymod.addons.customnametags;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
 import net.labymod.addons.customnametags.listener.NameTagBackgroundRenderListener;
@@ -148,12 +150,18 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
   }
 
   public Component replaceLegacyContext(Component component) {
-    component.setChildren(component.getChildren()
-        .stream().map(this::replaceLegacyContext).toList());
+    List<Component> children = new ArrayList<>();
+    for (Component child : component.getChildren()) {
+      children.add(this.replaceLegacyContext(child));
+    }
+    component.setChildren(children);
 
     if (component instanceof TranslatableComponent translatableComponent) {
-      translatableComponent.arguments(translatableComponent.getArguments()
-          .stream().map(this::replaceLegacyContext).toList());
+      List<Component> arguments = new ArrayList<>();
+      for (Component argument : translatableComponent.getArguments()) {
+        arguments.add(this.replaceLegacyContext(argument));
+      }
+      translatableComponent.arguments(arguments);
     }
 
     if (component instanceof TextComponent textComponent) {
