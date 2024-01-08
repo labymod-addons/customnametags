@@ -16,6 +16,8 @@
 
 package net.labymod.addons.customnametags;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
 import net.labymod.addons.customnametags.listener.NameTagBackgroundRenderListener;
@@ -24,6 +26,9 @@ import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.TranslatableComponent;
+import net.labymod.api.client.component.format.Style;
+import net.labymod.api.client.component.format.Style.Merge.Strategy;
+import net.labymod.api.client.component.serializer.legacy.LegacyComponentSerializer;
 import net.labymod.api.event.client.gui.screen.playerlist.PlayerListUpdateEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
@@ -96,10 +101,6 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             component.append(0, customName.get());
             return true;
           }
-
-          if (length > playerName.length() && text.charAt(playerName.length()) != ' ') {
-            return false;
-          }
         }
 
         textComponent.text("");
@@ -110,12 +111,32 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             continue;
           }
 
+          int nameEndsAt = i + playerName.length();
+
+          // Replace the name multiple times in the same text component
+          next = text.indexOf(playerName, nameEndsAt);
+
+          // Skip when player name is not at the start and the character in front of name is a space
+          if (i != 0 && text.charAt(i - 1) != ' ') {
+            continue;
+          }
+
+          // Skip when player name is not at the end and the character after the name is a space
+          if (nameEndsAt < length && text.charAt(nameEndsAt) != ' ') {
+            continue;
+          }
+
           if (i > lastNameAt) {
             component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
           }
 
           component.append(childIndex++, customName.get());
-          lastNameAt = i + playerName.length();
+          lastNameAt = nameEndsAt;
+
+          // Skip unnecessary loop
+          if (next == -1) {
+            break;
+          }
         }
 
         // no way to properly check for this in chat
@@ -126,5 +147,33 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     }
 
     return replaced;
+  }
+
+  public Component replaceLegacyContext(Component component) {
+    List<Component> children = new ArrayList<>();
+    for (Component child : component.getChildren()) {
+      children.add(this.replaceLegacyContext(child));
+    }
+    component.setChildren(children);
+
+    if (component instanceof TranslatableComponent translatableComponent) {
+      List<Component> arguments = new ArrayList<>();
+      for (Component argument : translatableComponent.getArguments()) {
+        arguments.add(this.replaceLegacyContext(argument));
+      }
+      translatableComponent.arguments(arguments);
+    }
+
+    if (component instanceof TextComponent textComponent) {
+      String text = textComponent.getText();
+
+      if (text.indexOf('§') != -1) {
+        Style style = component.style();
+        component = LegacyComponentSerializer.legacySection().deserialize(text);
+        component.style(component.style().merge(style, Strategy.IF_ABSENT_ON_TARGET));
+      }
+    }
+
+    return component;
   }
 }
