@@ -93,7 +93,6 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
 
       int next = text.indexOf(playerName);
       if (next != -1) {
-        replaced = true;
         int length = text.length();
         if (next == 0) {
           if (length == playerName.length()) {
@@ -130,6 +129,7 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
           }
 
+          replaced = true;
           component.append(childIndex++, customName.get());
           lastNameAt = nameEndsAt;
 
