@@ -93,7 +93,6 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
 
       int next = text.indexOf(playerName);
       if (next != -1) {
-        replaced = true;
         int length = text.length();
         if (next == 0) {
           if (length == playerName.length()) {
@@ -116,12 +115,12 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
           // Replace the name multiple times in the same text component
           next = text.indexOf(playerName, nameEndsAt);
 
-          // Skip when player name is not at the start and the character in front of name is a space
+          // Skip when player name is not at the start and the character in front of name is not a space
           if (i != 0 && text.charAt(i - 1) != ' ') {
             continue;
           }
 
-          // Skip when player name is not at the end and the character after the name is a space
+          // Skip when player name is not at the end and the character after the name is not a space
           if (nameEndsAt < length && text.charAt(nameEndsAt) != ' ') {
             continue;
           }
@@ -130,6 +129,7 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
             component.append(childIndex++, Component.text(text.substring(lastNameAt, i)));
           }
 
+          replaced = true;
           component.append(childIndex++, customName.get());
           lastNameAt = nameEndsAt;
 
@@ -154,7 +154,6 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     for (Component child : component.getChildren()) {
       children.add(this.replaceLegacyContext(child));
     }
-    component.setChildren(children);
 
     if (component instanceof TranslatableComponent translatableComponent) {
       List<Component> arguments = new ArrayList<>();
@@ -171,8 +170,16 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
         Style style = component.style();
         component = LegacyComponentSerializer.legacySection().deserialize(text);
         component.style(component.style().merge(style, Strategy.IF_ABSENT_ON_TARGET));
+
+        for (Component child : children) {
+          component.append(child);
+        }
+
+        return component;
       }
     }
+
+    component.setChildren(children);
 
     return component;
   }
