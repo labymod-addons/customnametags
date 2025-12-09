@@ -14,6 +14,9 @@
                 "background": {
                     "name": "Fundo"
                 }
+            },
+            "checkForStringInTabList": {
+                "name": "Checar pelo Nome no Tab List"
             }
         },
         "gui": {
