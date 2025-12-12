@@ -7,6 +7,11 @@
             },
             "openNameTags": {
                 "name": "تعديل الأسماء المخصّصة"
+            },
+            "header": {
+                "background": {
+                    "name": "الخلفية"
+                }
             }
         },
         "gui": {
