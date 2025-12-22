@@ -39,7 +39,8 @@
                 },
                 "edit": "Bewerk een aangepaste Naamlabel",
                 "remove": {
-                    "title": "Weet je zeker dat je dit item wilt verwijderen?"
+                    "title": "Weet je zeker dat je dit item wilt verwijderen?",
+                    "description": "Wil je echt de custom nametag van %s veranderen? Deze actie kan niet terug gedraaid worden!"
                 }
             }
         }
