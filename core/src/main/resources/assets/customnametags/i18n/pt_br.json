@@ -12,6 +12,13 @@
             "manage": {
                 "enabled": {
                     "name": "Ativado"
+                },
+                "name": "Nome de Usuário do Minecraft",
+                "custom": {
+                    "name": "Novo Nome para este Jogador"
+                },
+                "replace": {
+                    "name": "Substituir Prefixo e Sufixo"
                 }
             }
         }
