@@ -1,1 +1,23 @@
-{}
+{
+    "customnametags": {
+        "settings": {
+            "checkForStringInTabList": {
+                "description": "Dit kan veel systeembronnen vergen wanneer er veel aangepaste naamlabels zijn ingesteld, maar het zorgt ervoor dat CustomNameTags op elke server werkt zoals bedoeld. Het uitschakelen hiervan kan de prestaties verbeteren, maar CustomNameTags zal niet langer werken in de tablijst op servers die deze sterk aanpassen (zoals op Hypixel SkyBlock).",
+                "name": "Controleer op naam in de tablijst"
+            },
+            "hideNameTagBackground": {
+                "name": "Achtergrond van naamlabel verbergen"
+            },
+            "color": {
+                "name": "Achtergrondkleur"
+            },
+            "enabled": {
+                "name": "Ingeschakeld"
+            },
+            "openNameTags": {
+                "name": "Aangepaste naamlabels bewerken"
+            },
+            "name": "Aangepaste naamlabels"
+        }
+    }
+}
