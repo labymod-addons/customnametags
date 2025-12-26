@@ -17,7 +17,28 @@
             "openNameTags": {
                 "name": "Aangepaste naamlabels bewerken"
             },
-            "name": "Aangepaste naamlabels"
+            "name": "Aangepaste naamlabels",
+            "header": {
+                "background": {
+                    "name": "Achtergrond"
+                }
+            }
+        },
+        "gui": {
+            "manage": {
+                "add": "Een nieuw aangepast naamlabel toevoegen",
+                "name": "Minecraft-gebruikersnaam",
+                "custom": {
+                    "name": "Nieuwe naam voor deze speler"
+                },
+                "enabled": {
+                    "name": "Ingeschakeld"
+                },
+                "replace": {
+                    "name": "Voorvoegsel en achtervoegsel vervangen"
+                },
+                "edit": "Bewerk een aangepaste Naamlabel"
+            }
         }
     }
 }
