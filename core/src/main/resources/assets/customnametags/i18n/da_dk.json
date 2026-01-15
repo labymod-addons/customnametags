@@ -39,7 +39,8 @@
                     "name": "Erstat præfiks og suffiks"
                 },
                 "remove": {
-                    "description": "Vil du virkelig slette det brugerdefinerede navneskilt for %s? Denne handling kan ikke fortrydes!"
+                    "description": "Vil du virkelig slette det brugerdefinerede navneskilt for %s? Denne handling kan ikke fortrydes!",
+                    "title": "Vil du virkelig fjerne denne post?"
                 }
             }
         }
