@@ -3,6 +3,9 @@
         "settings": {
             "enabled": {
                 "name": "Ativado"
+            },
+            "color": {
+                "name": "Cor de Fundo"
             }
         },
         "gui": {
