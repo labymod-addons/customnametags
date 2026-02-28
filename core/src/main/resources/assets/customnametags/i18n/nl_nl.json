@@ -37,7 +37,10 @@
                 "replace": {
                     "name": "Prefix en Suffix vervangen"
                 },
-                "edit": "Bewerk een aangepaste Naamlabel"
+                "edit": "Bewerk een aangepaste Naamlabel",
+                "remove": {
+                    "title": "Weet je zeker dat je dit item wilt verwijderen?"
+                }
             }
         }
     }
