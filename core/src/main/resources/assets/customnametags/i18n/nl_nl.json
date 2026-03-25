@@ -26,8 +26,8 @@
         },
         "gui": {
             "manage": {
-                "add": "Een nieuw aangepast naamlabel toevoegen",
-                "name": "Minecraft-gebruikersnaam",
+                "add": "Een nieuw aangepast naamtag toevoegen",
+                "name": "Minecraft gebruikersnaam",
                 "custom": {
                     "name": "Nieuwe naam voor deze speler"
                 },
@@ -35,7 +35,7 @@
                     "name": "Ingeschakeld"
                 },
                 "replace": {
-                    "name": "Voorvoegsel en achtervoegsel vervangen"
+                    "name": "Prefix en Suffix vervangen"
                 },
                 "edit": "Bewerk een aangepaste Naamlabel"
             }
