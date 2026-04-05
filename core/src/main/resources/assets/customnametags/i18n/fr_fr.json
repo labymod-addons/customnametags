@@ -1,1 +1,10 @@
-{}
+{
+    "customnametags": {
+        "settings": {
+            "name": "Étiquettes de nom personnalisées",
+            "enabled": {
+                "name": "Activé"
+            }
+        }
+    }
+}
