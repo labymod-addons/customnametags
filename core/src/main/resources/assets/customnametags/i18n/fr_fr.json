@@ -4,6 +4,12 @@
             "name": "Étiquettes de nom personnalisées",
             "enabled": {
                 "name": "Activé"
+            },
+            "openNameTags": {
+                "name": "Modifier les étiquettes de nom personnalisées"
+            },
+            "checkForStringInTabList": {
+                "name": "Vérifier le nom dans la liste du tableau"
             }
         }
     }
