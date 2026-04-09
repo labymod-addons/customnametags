@@ -9,7 +9,39 @@
                 "name": "Modifier les étiquettes de nom personnalisées"
             },
             "checkForStringInTabList": {
-                "name": "Vérifier le nom dans la liste du tableau"
+                "name": "Vérifier le nom dans la liste du tableau",
+                "description": "Cela peut être très gourmand en ressources si de nombreux name tags personnalisés sont configurés, mais cela garantit que CustomNameTags fonctionne sur tous les serveurs comme prévu. Désactiver cette option peut améliorer les performances, mais CustomNameTags ne fonctionnera plus dans la liste des joueurs sur les serveurs qui modifient fortement la tab list (par exemple sur Hypixel SkyBlock)."
+            },
+            "hideNameTagBackground": {
+                "name": "Masquer l'arrière-plan du name tag"
+            },
+            "color": {
+                "name": "Couleur de l'arrière-plan"
+            },
+            "header": {
+                "background": {
+                    "name": "Arrière-plan"
+                }
+            }
+        },
+        "gui": {
+            "manage": {
+                "add": "Ajouter un nouveau name tag personnalisé",
+                "edit": "Modifier un name tag personnalisé",
+                "name": "Nom d'utilisateur Minecraft",
+                "custom": {
+                    "name": "Nouveau nom pour ce joueur"
+                },
+                "enabled": {
+                    "name": "Activé"
+                },
+                "replace": {
+                    "name": "Remplacer le préfixe et le suffixe"
+                },
+                "remove": {
+                    "title": "Voulez-vous vraiment supprimer cette entrée ?",
+                    "description": "Voulez-vous vraiment supprimer le name tag personnalisé de %s ? Cette action est irréversible !"
+                }
             }
         }
     }
