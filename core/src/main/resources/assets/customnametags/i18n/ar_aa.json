@@ -1,7 +1,13 @@
 {
     "customnametags": {
         "settings": {
-            "name": "أسماء مخصّصة"
+            "name": "أسماء مخصّصة",
+            "enabled": {
+                "name": "مفعّل"
+            },
+            "openNameTags": {
+                "name": "تعديل الأسماء المخصّصة"
+            }
         },
         "gui": {
             "manage": {
