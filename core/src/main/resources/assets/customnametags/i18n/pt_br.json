@@ -6,6 +6,14 @@
             },
             "color": {
                 "name": "Cor de Fundo"
+            },
+            "openNameTags": {
+                "name": "Editar Customização de Nome"
+            },
+            "header": {
+                "background": {
+                    "name": "Fundo"
+                }
             }
         },
         "gui": {
