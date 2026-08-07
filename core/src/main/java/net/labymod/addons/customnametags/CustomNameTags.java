@@ -19,10 +19,12 @@ package net.labymod.addons.customnametags;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import net.labymod.addons.customnametags.legacy.CustomNameTagsLegacyConverter;
 import net.labymod.addons.customnametags.listener.ChatReceiveListener;
 import net.labymod.addons.customnametags.listener.ConfigVersionUpdateListener;
 import net.labymod.addons.customnametags.listener.NameTagBackgroundRenderListener;
 import net.labymod.addons.customnametags.listener.PlayerNameTagRenderListener;
+import net.labymod.api.Laby;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
@@ -59,6 +61,8 @@ public class CustomNameTags extends LabyAddon<CustomNameTagsConfiguration> {
     this.registerListener(new ChatReceiveListener(this));
     this.registerListener(new NameTagBackgroundRenderListener(this));
     this.registerListener(new PlayerNameTagRenderListener(this));
+
+    this.registerLegacyConverter(new CustomNameTagsLegacyConverter(this));
 
     if (this.wasLoadedInRuntime()) {
       this.reloadTabList();
