@@ -16,7 +16,7 @@
                 }
             },
             "checkForStringInTabList": {
-                "name": "Checar pelo Nome no Tab List"
+                "name": "Checar pelo Nome na Lista de Abas"
             }
         },
         "gui": {
